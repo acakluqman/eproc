@@ -1,0 +1,12 @@
+Options +FollowSymLinks
+RewriteEngine On
+
+RewriteRule ^auth/login$ ./auth.php?page=login
+RewriteRule ^auth/register$ ./auth.php?page=register
+RewriteRule ^auth/password$ ./auth.php?page=password
+RewriteRule ^auth/reset$ ./auth.php?page=reset
+
+RewriteRule ^tender$ ./index.php?page=tender
+RewriteRule ^tender/detail/([0-9]*)$ ./index.php?page=tender_detail&id_tender=$1
+
+RewriteRule ^app/dashboard$ ./app.php?page=dashboard
