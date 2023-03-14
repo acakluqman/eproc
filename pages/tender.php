@@ -1,83 +1,60 @@
-<!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0"> Top Navigation <small>Example 3.0</small></h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Layout</a></li>
-                    <li class="breadcrumb-item active">Top Navigation</li>
-                </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+                <h1 class="m-0">Tender</h1>
+            </div>
+        </div>
+    </div>
 </div>
-<!-- /.content-header -->
 
-<!-- Main content -->
 <div class="content">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the card's
-                            content.
-                        </p>
-
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                    </div>
-                </div>
-
-                <div class="card card-primary card-outline">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the card's
-                            content.
-                        </p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                    </div>
-                </div><!-- /.card -->
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-striped table-sm" id="tender">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Kode Tender</th>
+                            <th>Judul Tender</th>
+                            <th>Satuan Kerja</th>
+                            <th>HPS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php for ($i = 0; $i < 5; $i++) : ?>
+                            <tr>
+                                <td class="text-center align-middle">
+                                    <a href="./tender/detail/<?= strtotime('now') + $i ?>">
+                                        <?= strtotime('now') + $i ?>
+                                    </a>
+                                </td>
+                                <td class="align-middle">
+                                    <span class="badge badge-warning text-light">Tender Ulang</span>
+                                    <p class="pt-0 pb-0">Renovasi Interior Ruang Rektor, Plafon, Lantai Koridor dan Kamar Mandi Gedung Rektorat</p>
+                                </td>
+                                <td class="align-middle">Universitas Wijaya Kusuma</td>
+                                <td class="align-middle">Rp. 7.800.000.000</td>
+                            </tr>
+                        <?php endfor; ?>
+                    </tbody>
+                </table>
             </div>
-            <!-- /.col-md-6 -->
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title m-0">Featured</h5>
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-title">Special title treatment</h6>
-
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-
-                <div class="card card-primary card-outline">
-                    <div class="card-header">
-                        <h5 class="card-title m-0">Featured</h5>
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-title">Special title treatment</h6>
-
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-md-6 -->
         </div>
-        <!-- /.row -->
-    </div><!-- /.container-fluid -->
+    </div>
 </div>
-<!-- /.content -->
+
+<script>
+    let tender;
+
+    $(function() {
+        tender = $('#tender').DataTable({
+            language: {
+                processing: 'Loading...',
+                searchPlaceholder: 'Cari...',
+                sSearch: '',
+                lengthMenu: '_MENU_'
+            },
+        });
+    })
+</script>

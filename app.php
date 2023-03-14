@@ -1,5 +1,6 @@
 <?php
 require_once('./config.php');
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -31,7 +32,7 @@ require_once('./config.php');
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <a href="#" class="dropdown-item">
                             <div class="media">
-                                <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                                <img src="../dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         Brad Diesel
@@ -45,7 +46,7 @@ require_once('./config.php');
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item">
                             <div class="media">
-                                <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                <img src="../dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         John Pierce
@@ -61,7 +62,7 @@ require_once('./config.php');
                         <a href="#" class="dropdown-item">
                             <!-- Message Start -->
                             <div class="media">
-                                <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                <img src="../dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         Nora Silvester
@@ -142,13 +143,13 @@ require_once('./config.php');
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column nav-flat nav-legacy" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="./auth/logout" class="nav-link">
+                            <a href="/app/dashboard" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>DASHBOARD</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="./auth/logout" class="nav-link">
+                            <a href="/app/tender" class="nav-link">
                                 <i class="nav-icon fas fa-gavel"></i>
                                 <p>DATA TENDER</p>
                             </a>
@@ -163,19 +164,19 @@ require_once('./config.php');
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="/user/admin" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Administrator</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link active">
+                                    <a href="/user/petugas" class="nav-link active">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Petugas LPSE</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="/user/vendor" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Vendor</p>
                                     </a>
@@ -183,12 +184,9 @@ require_once('./config.php');
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="./auth/logout" class="nav-link">
+                            <a href="/auth/logout" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
-                                <p>
-                                    LOGOUT
-                                    <span class="right badge badge-danger">New</span>
-                                </p>
+                                <p>LOGOUT</p>
                             </a>
                         </li>
                     </ul>

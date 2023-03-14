@@ -1,6 +1,17 @@
 <?php
+
+use Tamtamchik\SimpleFlash\Flash;
+
 ob_start();
-session_start();
+if (!session_id()) {
+    session_start();
+}
+
+require_once('./config.php');
+require_once('vendor/autoload.php');
+require_once('function/general.php');
+
+$flash = new Flash();
 
 $_SESSION['is_login'] = true;
 $_SESSION['nama'] = 'Luqman Hakim';
@@ -8,7 +19,7 @@ $_SESSION['nama'] = 'Luqman Hakim';
 $db_host = '127.0.0.1';
 $db_user = 'root';
 $db_name = 'eproc';
-$db_pass = 'hackyhack';
+$db_pass = 'hackyhack';     // rJkZ[-I+dTBK
 
 try {
     $conn = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
