@@ -1,6 +1,10 @@
 <?php
 require_once('./config.php');
 
+if (!isset($_SESSION['is_login'])) {
+    header('Location:' . base_url('auth/login'));
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -10,13 +14,31 @@ require_once('./config.php');
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>eProcurement &bullet; Universitas Wijaya Kusuma Surabaya</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="<?= base_url('plugins/fontawesome-free/css/all.min.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('dist/css/adminlte.min.css') ?>">
+    <link rel="stylesheet" href="https://unpkg.com/filepond@4.30.4/dist/filepond.css">
+    <link href="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="<?= base_url('favicon.ico') ?>" type="image/x-icon">
+
+    <script src="<?= base_url('plugins/jquery/jquery.min.js') ?>"></script>
+    <script src="<?= base_url('plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
+    <script src="<?= base_url('plugins/datatables/jquery.dataTables.min.js') ?>"></script>
+    <script src="<?= base_url('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') ?>"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-crop@2.0.6/dist/filepond-plugin-image-crop.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-transform@3.8.7/dist/filepond-plugin-image-transform.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.js"></script>
+    <script src="https://unpkg.com/jquery-filepond/filepond.jquery.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light" aria-label="nav">
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
@@ -32,7 +54,7 @@ require_once('./config.php');
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <a href="#" class="dropdown-item">
                             <div class="media">
-                                <img src="../dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                                <img src="<?= base_url('dist/img/user1-128x128.jpg') ?>" alt="User Avatar" class="img-size-50 mr-3 img-circle">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         Brad Diesel
@@ -46,7 +68,7 @@ require_once('./config.php');
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item">
                             <div class="media">
-                                <img src="../dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                <img src="<?= base_url('dist/img/user8-128x128.jpg') ?>" alt="User Avatar" class="img-size-50 img-circle mr-3">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         John Pierce
@@ -56,13 +78,11 @@ require_once('./config.php');
                                     <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
                                 </div>
                             </div>
-                            <!-- Message End -->
                         </a>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
                             <div class="media">
-                                <img src="../dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                <img src="<?= base_url('dist/img/user3-128x128.jpg') ?>" alt="User Avatar" class="img-size-50 img-circle mr-3">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         Nora Silvester
@@ -105,8 +125,8 @@ require_once('./config.php');
                     </div>
                 </li>
                 <li class="nav-item dropdown user-menu">
-                    <a href="/app/profil" class="nav-link">
-                        <img src="../../dist/img/user2-160x160.jpg" class="user-image img-circle" alt="<?= $_SESSION['nama'] ?>">
+                    <a href="<?= base_url('app/profil') ?>" class="nav-link">
+                        <img src="<?= base_url('dist/img/user2-160x160.jpg') ?>" class="user-image img-circle" alt="<?= $_SESSION['nama'] ?>">
                         <span class="d-none d-md-inline"><?= $_SESSION['nama'] ?></span>
                     </a>
                 </li>
@@ -114,15 +134,15 @@ require_once('./config.php');
         </nav>
 
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <a href="/app/dashboard" class="brand-link">
-                <img src="../dist/img/uwks.png" alt="AdminLTE Logo" class="brand-image img-circle">
+            <a href="<?= base_url('app/dashboard') ?>" class="brand-link">
+                <img src="<?= base_url('dist/img/uwks.png') ?>" alt="AdminLTE Logo" class="brand-image img-circle">
                 <span class="brand-text font-weight-light">eProcurement</span>
             </a>
 
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                        <img src="<?= base_url('dist/img/user2-160x160.jpg') ?>" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
                         <a href="#" class="d-block"><?= $_SESSION['nama'] ?></a>
@@ -140,146 +160,71 @@ require_once('./config.php');
                     </div>
                 </div>
 
-                <nav class="mt-2">
+                <nav class="mt-2" aria-label="nav">
                     <ul class="nav nav-pills nav-sidebar flex-column nav-flat nav-legacy" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="/app/dashboard" class="nav-link">
+                            <a href="<?= base_url('app/dashboard') ?>" class="nav-link <?= $_GET['page'] == 'dashboard' ? 'active' : '' ?>">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>DASHBOARD</p>
                             </a>
                         </li>
+
                         <li class="nav-item">
-                            <a href="/app/tender" class="nav-link">
+                            <a href="<?= base_url('app/tender') ?>" class="nav-link <?= in_array($_GET['page'], ['tender', 'tender_detail']) ? 'active' : '' ?>">
                                 <i class="nav-icon fas fa-gavel"></i>
                                 <p>DATA TENDER</p>
                             </a>
                         </li>
-                        <li class="nav-item menu-open">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>
-                                    DATA PENGGUNA
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="/user/admin" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Administrator</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/user/petugas" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Petugas LPSE</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/user/vendor" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Vendor</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+
+                        <?php if ($_SESSION['jenis_user'] == 1) : ?>
+                            <li class="nav-item <?= (isset($_GET['page']) && $_GET['page'] == 'user') ? 'menu-open' : '' ?>">
+                                <a href="#" class="nav-link <?= (isset($_GET['page']) && $_GET['page'] == 'user') ? 'active' : '' ?>">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>
+                                        DATA PENGGUNA
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="<?= base_url('app/user/admin') ?>" class="nav-link <?= (isset($_GET['page']) && $_GET['page'] == 'user' && $_GET['id_jenis'] == 1) ? 'active' : '' ?>">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Administrator</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?= base_url('app/user/petugas') ?>" class="nav-link <?= (isset($_GET['page']) && $_GET['page'] == 'user' && $_GET['id_jenis'] == 2) ? 'active' : '' ?>">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Petugas LPSE</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?= base_url('app/user/vendor') ?>" class="nav-link <?= (isset($_GET['page']) && $_GET['page'] == 'user' && $_GET['id_jenis'] == 3) ? 'active' : '' ?>">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Vendor</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        <?php endif ?>
                         <li class="nav-item">
-                            <a href="/auth/logout" class="nav-link">
+                            <a href="<?= base_url('auth/logout') ?>" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>LOGOUT</p>
                             </a>
                         </li>
                     </ul>
                 </nav>
-                <!-- /.sidebar-menu -->
             </div>
-            <!-- /.sidebar -->
         </aside>
 
-        <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Starter Page</h1>
-                        </div><!-- /.col -->
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Starter Page</li>
-                            </ol>
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
-            </div>
-            <!-- /.content-header -->
-
-            <!-- Main content -->
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the card's
-                                        content.
-                                    </p>
-
-                                    <a href="#" class="card-link">Card link</a>
-                                    <a href="#" class="card-link">Another link</a>
-                                </div>
-                            </div>
-
-                            <div class="card card-primary card-outline">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the card's
-                                        content.
-                                    </p>
-                                    <a href="#" class="card-link">Card link</a>
-                                    <a href="#" class="card-link">Another link</a>
-                                </div>
-                            </div><!-- /.card -->
-                        </div>
-                        <!-- /.col-md-6 -->
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="m-0">Featured</h5>
-                                </div>
-                                <div class="card-body">
-                                    <h6 class="card-title">Special title treatment</h6>
-
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                                </div>
-                            </div>
-
-                            <div class="card card-primary card-outline">
-                                <div class="card-header">
-                                    <h5 class="m-0">Featured</h5>
-                                </div>
-                                <div class="card-body">
-                                    <h6 class="card-title">Special title treatment</h6>
-
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.col-md-6 -->
-                    </div>
-                    <!-- /.row -->
-                </div><!-- /.container-fluid -->
-            </div>
-            <!-- /.content -->
+            <?php
+            if (isset($_GET['page']) && file_exists('./pages/app/' . $_GET['page'] . '.php')) {
+                require_once('./pages/app/' . $_GET['page'] . '.php');
+            } else {
+            }
+            ?>
         </div>
 
         <footer class="main-footer">
@@ -290,9 +235,7 @@ require_once('./config.php');
         </footer>
     </div>
 
-    <script src="../plugins/jquery/jquery.min.js"></script>
-    <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../dist/js/adminlte.min.js"></script>
+    <script src="<?= base_url('dist/js/adminlte.min.js') ?>"></script>
 </body>
 
 </html>

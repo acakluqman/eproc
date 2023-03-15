@@ -24,9 +24,9 @@ DROP TABLE IF EXISTS `jenis_tender`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `jenis_tender` (
   `id_jenis_tender` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `nama` varchar(150) NOT NULL,
+  `nama` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id_jenis_tender`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -48,9 +48,9 @@ DROP TABLE IF EXISTS `satker`;
 CREATE TABLE `satker` (
   `id_satker` bigint unsigned NOT NULL AUTO_INCREMENT,
   `id_induk_satker` bigint unsigned NOT NULL,
-  `nama` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nama` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id_satker`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,8 +72,8 @@ DROP TABLE IF EXISTS `tender`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tender` (
   `id_tender` bigint unsigned NOT NULL,
-  `judul` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `deskripsi` text NOT NULL,
+  `judul` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `deskripsi` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `id_satker` bigint unsigned NOT NULL,
   `nilai_pagu` decimal(10,3) NOT NULL,
   `nilai_hps` decimal(10,3) NOT NULL,
@@ -82,9 +82,9 @@ CREATE TABLE `tender` (
   `is_setuju` tinyint(1) DEFAULT NULL,
   `tgl_setuju` datetime DEFAULT NULL,
   `id_user_setuju` bigint unsigned DEFAULT NULL,
-  `catatan_persetujuan` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `catatan_persetujuan` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `status` bigint unsigned NOT NULL,
-  `keterangan` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `keterangan` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `tgl_buat` datetime NOT NULL,
   PRIMARY KEY (`id_tender`),
   KEY `tender_FK` (`id_user_setuju`),
@@ -93,7 +93,7 @@ CREATE TABLE `tender` (
   CONSTRAINT `tender_FK` FOREIGN KEY (`id_user_setuju`) REFERENCES `user` (`id_user`) ON UPDATE CASCADE,
   CONSTRAINT `tender_FK_1` FOREIGN KEY (`id_jenis_tender`) REFERENCES `jenis_tender` (`id_jenis_tender`) ON UPDATE CASCADE,
   CONSTRAINT `tender_FK_2` FOREIGN KEY (`id_satker`) REFERENCES `satker` (`id_satker`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,13 +123,13 @@ CREATE TABLE `tender_peserta` (
   `is_eval_administrasi` tinyint(1) DEFAULT NULL,
   `is_eval_teknis` tinyint(1) DEFAULT NULL,
   `is_pemenang` tinyint(1) NOT NULL,
-  `keterangan` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `keterangan` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `tgl_daftar` datetime NOT NULL,
   KEY `tender_peserta_FK` (`id_vendor`),
   KEY `tender_peserta_FK_1` (`⁯id_tender`),
   CONSTRAINT `tender_peserta_FK` FOREIGN KEY (`id_vendor`) REFERENCES `vendor` (`id_vendor`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `tender_peserta_FK_1` FOREIGN KEY (`⁯id_tender`) REFERENCES `tender` (`id_tender`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -150,9 +150,9 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `id_user` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `nama` varchar(150) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `password` varchar(250) NOT NULL,
+  `nama` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `jenis_user` tinyint unsigned NOT NULL,
   `id_vendor` bigint unsigned DEFAULT NULL,
   `tgl_daftar` datetime NOT NULL,
@@ -160,7 +160,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `user_UN` (`email`),
   KEY `user_FK` (`id_vendor`),
   CONSTRAINT `user_FK` FOREIGN KEY (`id_vendor`) REFERENCES `vendor` (`id_vendor`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -181,25 +181,25 @@ DROP TABLE IF EXISTS `vendor`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `vendor` (
   `id_vendor` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `nama` varchar(250) NOT NULL,
-  `alamat` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `npwp` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `nama_npwp` varchar(250) NOT NULL,
-  `file_npwp_path` varchar(100) NOT NULL,
-  `nama_pemilik` varchar(250) NOT NULL,
-  `nik_pemilik` varchar(16) NOT NULL,
-  `file_ktp_path` varchar(100) NOT NULL,
-  `no_siup` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `file_siup_path` varchar(100) NOT NULL,
-  `no_nib` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `no_sppkp` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `file_sppkp_path` varchar(100) DEFAULT NULL,
+  `nama` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `alamat` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `npwp` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `nama_npwp` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `file_npwp_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `nama_pemilik` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `nik_pemilik` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `file_ktp_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `no_siup` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `file_siup_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `no_nib` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `no_sppkp` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `file_sppkp_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id_vendor`),
   UNIQUE KEY `vendor_UN` (`npwp`),
   UNIQUE KEY `vendor_nik_unique` (`nik_pemilik`),
   UNIQUE KEY `vendor_nib_unique` (`no_nib`),
   UNIQUE KEY `vendor_sppkp_unique` (`no_sppkp`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -225,4 +225,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-03-14 11:20:22
+-- Dump completed on 2023-03-14 12:51:08

@@ -1,5 +1,15 @@
 <?php
 require_once('./config.php');
+
+if (isset($_GET['action']) && $_GET['action'] == 'logout') {
+    session_destroy();
+
+    header('Location:' . base_url());
+}
+
+if (isset($_SESSION['is_login']) && !isset($_GET['action'])) {
+    header('Location:' . base_url());
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -11,6 +21,7 @@ require_once('./config.php');
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+    <link rel="shortcut icon" href="<?= base_url('favicon.ico') ?>" type="image/x-icon">
 </head>
 
 <body class="hold-transition login-page">

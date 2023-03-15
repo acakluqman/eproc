@@ -13,9 +13,6 @@ require_once('function/general.php');
 
 $flash = new Flash();
 
-$_SESSION['is_login'] = true;
-$_SESSION['nama'] = 'Luqman Hakim';
-
 $db_host = '127.0.0.1';
 $db_user = 'root';
 $db_name = 'eproc';

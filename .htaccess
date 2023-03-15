@@ -11,4 +11,11 @@ RewriteRule ^tender$ ./index.php?page=tender
 RewriteRule ^tender/detail/([0-9]*)$ ./index.php?page=tender_detail&id_tender=$1
 
 RewriteRule ^app/dashboard$ ./app.php?page=dashboard
+
 RewriteRule ^app/tender$ ./app.php?page=tender
+RewriteRule ^app/tender/tambah$ ./app.php?page=tender_tambah
+
+RewriteRule ^app/user/admin$ ./app.php?page=user&id_jenis=1
+RewriteRule ^app/user/petugas$ ./app.php?page=user&id_jenis=2
+RewriteRule ^app/user/vendor$ ./app.php?page=user&id_jenis=3
+RewriteRule ^app/profil$ ./app.php?page=profil
