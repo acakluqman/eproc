@@ -15,6 +15,15 @@
 </section>
 
 <section class="content">
+    <?php if ($_SESSION['jenis_user'] == 3 && is_null($_SESSION['id_vendor'])): ?>
+        <div class="alert alert-warning" role="alert">
+            <p><strong>Pendaftaran Belum Lengkap</strong></p>
+            <p class="mb-0">Silahkan lengkapi data perusahaan agar dapat melakukan penawaran tender!</p>
+            <p>Klik <a href="<?= base_url('app/profil') ?>" class="alert-link">disini</a> untuk melengkapi data perusahaan
+                Anda!</p>
+        </div>
+    <?php endif ?>
+
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Title</h3>
@@ -28,11 +37,10 @@
             </div>
         </div>
         <div class="card-body">
-            Start creating your amazing application!
-        </div>
 
-        <div class="card-footer">
-            Footer
+            <div class="card-footer">
+                Footer
+            </div>
         </div>
     </div>
 </section>

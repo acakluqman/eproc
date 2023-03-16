@@ -57,7 +57,8 @@ $tender = $tenderSql->fetchAll();
                             <select class="form-control" name="id_jenis" id="id_jenis">
                                 <option value="">Semua Jenis</option>
                                 <?php foreach ($jenis as $jn) : ?>
-                                    <option value="<?= $jn['id_jenis'] ?>" <?= (isset($_POST['id_jenis']) && $_POST['id_jenis'] == $jn['id_jenis']) ? 'selected' : '' ?>><?= $jn['nama'] ?></option>
+                                    <option value="<?= $jn['id_jenis'] ?>" <?= (isset($_POST['id_jenis']) && $_POST['id_jenis'] == $jn['id_jenis']) ? 'selected' : '' ?>>
+                                        <?= $jn['nama'] ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
@@ -68,7 +69,8 @@ $tender = $tenderSql->fetchAll();
                             <select class="form-control" name="id_status" id="id_status">
                                 <option value="">Semua Status</option>
                                 <?php foreach ($status as $st) : ?>
-                                    <option value="<?= $st['id_status'] ?>" <?= (isset($_POST['id_status']) && $_POST['id_status'] == $st['id_status']) ? 'selected' : '' ?>><?= $st['nama'] ?></option>
+                                    <option value="<?= $st['id_status'] ?>" <?= (isset($_POST['id_status']) && $_POST['id_status'] == $st['id_status']) ? 'selected' : '' ?>>
+                                        <?= $st['nama'] ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
@@ -76,7 +78,8 @@ $tender = $tenderSql->fetchAll();
                 </div>
             </div>
             <div class="card-footer">
-                <button type="submit" name="search" class="btn btn-primary"><i class="fas fa-search"></i> Tampilkan</button>
+                <button type="submit" name="search" class="btn btn-primary"><i class="fas fa-search"></i>
+                    Tampilkan</button>
             </div>
         </form>
     </div>
@@ -113,26 +116,26 @@ $tender = $tenderSql->fetchAll();
                                 <?php
                                 // jenis tender
                                 if ($t['id_jenis'] == 1) {
-                                    echo '<span class="badge bg-purple">' . $t['jenis_tender'] . '</span>&nbsp;';
+                                    echo '<span class="badge bg-purple">' . $t['jenis_tender'] . '</span> ';
                                 }
                                 if ($t['id_jenis'] == 2) {
-                                    echo '<span class="badge bg-teal">' . $t['jenis_tender'] . '</span>&nbsp;';
+                                    echo '<span class="badge bg-teal">' . $t['jenis_tender'] . '</span> ';
                                 }
 
                                 // status tender
                                 if ($t['id_status'] == 1) {
-                                    echo '<span class="badge badge-warning">' . $t['status'] . '</span>&nbsp;';
+                                    echo '<span class="badge badge-warning">' . $t['status'] . '</span> ';
                                 }
                                 if ($t['id_status'] == 2) {
-                                    echo '<span class="badge badge-success">' . $t['status'] . '</span>&nbsp;';
+                                    echo '<span class="badge badge-success">' . $t['status'] . '</span> ';
                                 }
                                 if ($t['id_status'] == 3) {
-                                    echo '<span class="badge badge-danger">' . $t['status'] . '</span>&nbsp;';
+                                    echo '<span class="badge badge-danger">' . $t['status'] . '</span> ';
                                 }
 
                                 // jumlah peserta
                                 if ($t['id_status'] == 2) {
-                                    echo '<span class="badge badge-info">' . $t['jml_peserta'] . ' Peserta</span>&nbsp;';
+                                    echo '<span class="badge badge-info">' . $t['jml_peserta'] . ' Peserta</span> ';
                                 }
 
                                 // judul

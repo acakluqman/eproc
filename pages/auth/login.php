@@ -10,6 +10,7 @@ if (isset($_POST['email'])) {
     if ($login->rowCount()) {
         if (password_verify($password, $user->password)) {
             $_SESSION['is_login'] = true;
+            $_SESSION['id_user'] = $user->id_user;
             $_SESSION['nama'] = $user->nama;
             $_SESSION['email'] = $user->email;
             $_SESSION['jenis_user'] = $user->jenis_user;
