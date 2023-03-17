@@ -18,26 +18,14 @@ if (!isset($_SESSION['is_login'])) {
     <link rel="stylesheet" href="<?= base_url('plugins/fontawesome-free/css/all.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('dist/css/adminlte.min.css') ?>">
-    <link rel="stylesheet" href="https://unpkg.com/filepond@4.30.4/dist/filepond.css">
-    <link href="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="<?= base_url('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('plugins/select2/css/select2.min.css') ?>">
     <link rel="shortcut icon" href="<?= base_url('favicon.ico') ?>" type="image/x-icon">
 
     <script src="<?= base_url('plugins/jquery/jquery.min.js') ?>"></script>
     <script src="<?= base_url('plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= base_url('plugins/datatables/jquery.dataTables.min.js') ?>"></script>
     <script src="<?= base_url('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') ?>"></script>
-    <link rel="stylesheet" href="<?= base_url('plugins/select2/css/select2.min.css') ?>">
-    <link rel="stylesheet" href="<?= base_url('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') ?>">
-
-    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-image-crop@2.0.6/dist/filepond-plugin-image-crop.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-image-transform@3.8.7/dist/filepond-plugin-image-transform.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.js"></script>
-    <script src="https://unpkg.com/jquery-filepond/filepond.jquery.js"></script>
     <script src="<?= base_url('plugins/select2/js/select2.full.min.js') ?>"></script>
 
 </head>
