@@ -46,37 +46,51 @@ require_once('./config.php');
                     <li class="nav-item <?= in_array($_GET['page'], ['tender', 'tender_detail']) ? 'active' : '' ?>">
                         <a href="<?= base_url('tender') ?>" class="nav-link">Tender</a>
                     </li>
+                    <?php if (isset($_SESSION['is_login'])) : ?>
+                        <li class="nav-item dropdown">
+                            <a id="dropdownUser" href="#" data-toggle="dropdown" aria-haspopup="true"
+                               aria-expanded="false"
+                               class="nav-link dropdown-toggle">Hi, <?= $_SESSION['nama'] ?></a>
+                            <ul aria-labelledby="dropdownUser" class="dropdown-menu border-0 shadow">
+                                <li>
+                                    <a href="<?= base_url('app/dashboard') ?>" class="dropdown-item">
+                                        Penawaran Saya
+                                    </a>
+                                </li>
+                                <li class="dropdown-divider"></li>
+                                <li>
+                                    <a href="<?= base_url('profil') ?>" class="dropdown-item">
+                                        Profil Saya
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="<?= base_url('auth/logout') ?>" class="dropdown-item">
+                                        Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item dropdown">
+                            <a id="dropdownUser" href="#" data-toggle="dropdown" aria-haspopup="true"
+                               aria-expanded="false"
+                               class="nav-link dropdown-toggle">Vendor</a>
+                            <ul aria-labelledby="dropdownUser" class="dropdown-menu border-0 shadow">
+                                <li>
+                                    <a href="<?= base_url('auth/login') ?>" class="dropdown-item">
+                                        Masuk Aplikasi
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="<?= base_url('auth/register') ?>" class="dropdown-item">
+                                        Pendaftaran Vendor
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </div>
-
-            <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
-                <?php if (isset($_SESSION['is_login'])) : ?>
-                    <li class="nav-item dropdown">
-                        <a id="dropdownUser" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                           class="nav-link dropdown-toggle">Hi, <?= $_SESSION['nama'] ?></a>
-                        <ul aria-labelledby="dropdownUser" class="dropdown-menu border-0 shadow">
-                            <li><a href="<?= base_url('app/dashboard') ?>" class="dropdown-item">Dashboard Aplikasi</a>
-                            </li>
-                            <li><a href="<?= base_url('app/profil') ?>" class="dropdown-item">Profil Saya</a></li>
-                            <li class="dropdown-divider"></li>
-                            <li><a href="<?= base_url('auth/logout') ?>" class="dropdown-item">Logout</a></li>
-                        </ul>
-                    </li>
-                <?php else : ?>
-                    <li class="nav-item dropdown">
-                        <a id="dropdownUser" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                           class="nav-link dropdown-toggle">
-                            <i class="fas fa-user"></i>
-                        </a>
-
-                        <ul aria-labelledby="dropdownUser" class="dropdown-menu border-0 shadow">
-                            <li><a href="<?= base_url('auth/login') ?>" class="dropdown-item">Masuk Aplikasi</a></li>
-                            <li><a href="<?= base_url('auth/register') ?>" class="dropdown-item">Pendaftaran Vendor
-                                    Baru</a></li>
-                        </ul>
-                    </li>
-                <?php endif ?>
-            </ul>
         </div>
     </nav>
 

@@ -18,3 +18,8 @@ function rupiah($angka)
 {
     return "Rp. " . number_format($angka, 2, ',', '.');
 }
+
+function escape($html)
+{
+    return htmlspecialchars($html, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");
+}

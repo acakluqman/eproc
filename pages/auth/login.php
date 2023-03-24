@@ -16,7 +16,11 @@ if (isset($_POST['email'])) {
             $_SESSION['jenis_user'] = $user->jenis_user;
             $_SESSION['id_vendor'] = $user->id_vendor;
 
-            header("Location: " . base_url() . "");
+            if ($user->jenis_user == 3) {
+                header("Location: " . base_url());
+            } else {
+                header("Location: " . base_url('app/dashboard'));
+            }
         } else {
             $flash->warning('Akun tidak ditemukan. Periksa kembali email dan kata sandi Anda!');
         }

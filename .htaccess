@@ -9,6 +9,8 @@ RewriteRule ^auth/reset$ ./auth.php?page=reset
 
 RewriteRule ^tender$ ./index.php?page=tender
 RewriteRule ^tender/detail/([0-9]*)$ ./index.php?page=tender_detail&id_tender=$1
+RewriteRule ^penawaran$ ./index.php?page=penawaran
+RewriteRule ^profil$ ./index.php?page=profil
 
 RewriteRule ^app/dashboard$ ./app.php?page=dashboard
 
