@@ -5,6 +5,11 @@ if (!isset($_SESSION['is_login'])) {
     header('Location:' . base_url('auth/login'));
     exit();
 }
+
+if (!in_array($_SESSION['jenis_user'], [1, 2])) {
+    header('Location:' . base_url());
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">

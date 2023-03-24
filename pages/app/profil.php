@@ -1,68 +1,7 @@
 <?php
 // simpan data vendor
 if (isset($_POST['vendor'])) {
-    $path = 'upload' . DIRECTORY_SEPARATOR;
-    $checkKtp = getimagesize($_FILES['file_ktp']['tmp_name']);
-    $checkNpwp = getimagesize($_FILES['file_npwp']['tmp_name']);
-    $checkMimeSiup = strtolower(pathinfo('upload/' . $_FILES['file_siup']['name'], PATHINFO_EXTENSION));
-    $ktpFilename = $path . uniqid() . '.' . pathinfo($_FILES['file_ktp']['name'], PATHINFO_EXTENSION);
-    $npwpFilename = $path . uniqid() . '.' . pathinfo($_FILES['file_ktp']['name'], PATHINFO_EXTENSION);
-    $siupFilename = $path . uniqid() . '.' . pathinfo($_FILES['file_ktp']['name'], PATHINFO_EXTENSION);
 
-    if (!$checkKtp) {
-        $flash->warning('Format file KTP yang hanya dapat diunggah adalah .jpg, .jpeg dan .png!');
-    } elseif (!$checkNpwp) {
-        $flash->warning('Format file NPWP yang hanya dapat diunggah adalah .jpg, .jpeg dan .png!');
-    } elseif ($_FILES["file_ktp"]["size"] > 2097152 || $_FILES["file_ktp"]["size"] > 2097152 || $_FILES["file_siup"]["size"] > 2097152) {
-        $flash->warning('Ukuran file yang dapat diunggah adalah 2MB!');
-    } elseif (!in_array($checkMimeSiup, ['png', 'jpg', 'jpeg', 'pdf'])) {
-        $flash->warning('Format file SIUP yang hanya dapat diunggah adalah .jpg, .jpeg, .png dan .pdf!');
-    }
-
-    if (move_uploaded_file($_FILES["file_ktp"]["tmp_name"], $ktpFilename)) {
-        $flash->success("The file " . $ktpFilename . " has been uploaded.");
-    } else {
-        $flash->warning("Sorry, there was an error uploading your file.");
-    }
-
-    if (move_uploaded_file($_FILES["file_npwp"]["tmp_name"], $npwpFilename)) {
-        $flash->success("The file " . $npwpFilename . " has been uploaded.");
-    } else {
-        $flash->warning("Sorry, there was an error uploading your file.");
-    }
-
-    if (move_uploaded_file($_FILES["file_siup"]["tmp_name"], $siupFilename)) {
-        $flash->success("The file " . $siupFilename . " has been uploaded.");
-    } else {
-        $flash->warning("Sorry, there was an error uploading your file.");
-    }
-
-    $nama = $_POST['nama_perusahaan'];
-    $alamat = $_POST['alamat_perusahaan'];
-    $nama_pemilik = $_POST['nama_pemilik'];
-    $nik_pemilik = $_POST['nik_pemilik'];
-    $file_ktp_path = $ktpFilename;
-    $npwp = $_POST['npwp'];
-    $nama_npwp = $_POST['nama_npwp'];
-    $file_npwp_path = $npwpFilename;
-    $no_siup = $_POST['siup'];
-    $file_siup_path = $siupFilename;
-    $no_nib = $_POST['nib'];
-
-    try {
-        $conn->beginTransaction();
-
-        $vendor = $conn->prepare("INSERT INTO vendor (nama, alamat, npwp, nama_npwp, file_npwp_path, nama_pemilik, nik_pemilik, file_ktp_path, no_siup, file_siup_path, no_nib) VALUES (:nama, :alamat, :npwp, :nama_npwp, :file_npwp_path, :nama_pemilik, :nik_pemilik, :file_ktp_path, :no_siup, :file_siup_path, :no_nib)");
-        $vendor->execute(['nama' => $nama, 'alamat' => $alamat, 'npwp' => $npwp, 'nama_npwp' => $nama_npwp, 'file_npwp_path' => $file_npwp_path, 'nama_pemilik' => $nama_pemilik, 'nik_pemilik' => $nik_pemilik, 'file_ktp_path' => $file_ktp_path, 'no_siup' => $no_siup, 'file_siup_path' => $file_siup_path, 'no_nib' => $no_nib]);
-
-        $user = $conn->prepare("UPDATE user SET id_vendor = :id_vendor WHERE id_user = :id_user");
-        $user->execute(['id_vendor' => $conn->lastInsertId(), 'id_user' => $_SESSION['id_user']]);
-
-        $conn->commit();
-    } catch (PDOExecption $e) {
-        $conn->rollBack();
-        throw new Exception($e->getMessage());
-    }
 
 }
 ?>
