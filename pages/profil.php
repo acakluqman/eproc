@@ -80,13 +80,13 @@ if (sizeof($_POST) > 0) {
             }
         }
 
-        $nama = $_POST['nama'];
+        $nama = strtoupper($_POST['nama']);
         $alamat = $_POST['alamat'];
-        $nama_pemilik = $_POST['nama_pemilik'];
+        $nama_pemilik = strtoupper($_POST['nama_pemilik']);
         $nik_pemilik = $_POST['nik_pemilik'];
         $file_ktp_path = $ktpFilename ?: $vendor->file_ktp_path;
         $npwp = $_POST['npwp'];
-        $nama_npwp = $_POST['nama_npwp'];
+        $nama_npwp = strtoupper($_POST['nama_npwp']);
         $file_npwp_path = $npwpFilename ?: $vendor->file_npwp_path;
         $no_siup = $_POST['siup'];
         $file_siup_path = $siupFilename ?: $vendor->file_siup_path;
@@ -101,8 +101,11 @@ if (sizeof($_POST) > 0) {
                 $vendorSql = $conn->prepare("INSERT INTO vendor (nama, alamat, npwp, nama_npwp, file_npwp_path, nama_pemilik, nik_pemilik, file_ktp_path, no_siup, file_siup_path, no_nib) VALUES (:nama, :alamat, :npwp, :nama_npwp, :file_npwp_path, :nama_pemilik, :nik_pemilik, :file_ktp_path, :no_siup, :file_siup_path, :no_nib)");
                 $vendorSql->execute(['nama' => $nama, 'alamat' => $alamat, 'npwp' => $npwp, 'nama_npwp' => $nama_npwp, 'file_npwp_path' => $file_npwp_path, 'nama_pemilik' => $nama_pemilik, 'nik_pemilik' => $nik_pemilik, 'file_ktp_path' => $file_ktp_path, 'no_siup' => $no_siup, 'file_siup_path' => $file_siup_path, 'no_nib' => $no_nib]);
 
+                $id_vendor = $conn->lastInsertId();
                 $user = $conn->prepare("UPDATE user SET id_vendor = :id_vendor WHERE id_user = :id_user");
-                $user->execute(['id_vendor' => $conn->lastInsertId(), 'id_user' => $_SESSION['id_user']]);
+                $user->execute(['id_vendor' => $id_vendor, 'id_user' => $_SESSION['id_user']]);
+
+                $_SESSION['id_vendor'] = $id_vendor;
             }
 
             $conn->commit();
@@ -236,9 +239,9 @@ if (sizeof($_POST) > 0) {
                                 </div>
                                 <div class="col-md-4">
                                     <label for="file_ktp">File KTP</label>
-                                    <?= $vendor->file_ktp_path ? '<a href="' . base_url($vendor->file_ktp_path) . '" target="_blank"><i class="fas fa-image"></i> Lihat file KTP terunggah</a>' : '' ?>
+                                    <?= ($vendor && $vendor->file_ktp_path) ? '<a href="' . base_url($vendor->file_ktp_path) . '" target="_blank"><i class="fas fa-image"></i> Lihat file KTP terunggah</a>' : '' ?>
                                     <input type="file" class="form-control" name="file_ktp" id="file_ktp"
-                                           accept="image/*" <?= $vendor->file_ktp_path ? '' : 'required' ?>>
+                                           accept="image/*" <?= ($vendor && $vendor->file_ktp_path) ? '' : 'required' ?>>
                                 </div>
                             </div>
 
@@ -253,13 +256,13 @@ if (sizeof($_POST) > 0) {
                                     <label for="npwp">NPWP</label>
                                     <input type="text" class="form-control" id="npwp" name="npwp"
                                            placeholder="NPWP Perusahaan" value="<?= $vendor ? $vendor->npwp : '' ?>"
-                                           autocomplete="npwp" required>
+                                           autocomplete="npwp" minlength="16" maxlength="25" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="file_npwp">File NPWP</label>
-                                    <?= $vendor->file_npwp_path ? '<a href="' . base_url($vendor->file_npwp_path) . '" target="_blank"><i class="fas fa-image"></i> Lihat file NPWP terunggah</a>' : '' ?>
+                                    <?= ($vendor && $vendor->file_npwp_path) ? '<a href="' . base_url($vendor->file_npwp_path) . '" target="_blank"><i class="fas fa-image"></i> Lihat file NPWP terunggah</a>' : '' ?>
                                     <input type="file" class="form-control" name="file_npwp" id="file_npwp"
-                                           accept="image/*" <?= $vendor->file_npwp_path ? '' : 'required' ?>>
+                                           accept="image/*" <?= ($vendor && $vendor->file_npwp_path) ? '' : 'required' ?>>
                                 </div>
                             </div>
 
@@ -268,19 +271,19 @@ if (sizeof($_POST) > 0) {
                                     <label for="nib">Nomor NIB</label>
                                     <input type="text" class="form-control" id="nib" name="nib"
                                            placeholder="Nomor NIB" value="<?= $vendor ? $vendor->no_nib : '' ?>"
-                                           autocomplete="nib" required>
+                                           autocomplete="nib" minlength="15" maxlength="15" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="siup">Nomor SIUP</label>
                                     <input type="text" class="form-control" id="siup" name="siup"
                                            placeholder="Nomor SIUP" value="<?= $vendor ? $vendor->no_siup : '' ?>"
-                                           autocomplete="siup" required>
+                                           autocomplete="siup" minlength="15" maxlength="15" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="file_siup">File SIUP</label>
-                                    <?= $vendor->file_siup_path ? '<a href="' . base_url($vendor->file_siup_path) . '" target="_blank"><i class="fas fa-image"></i> Lihat file SIUP terunggah</a>' : '' ?>
+                                    <?= ($vendor && $vendor->file_siup_path) ? '<a href="' . base_url($vendor->file_siup_path) . '" target="_blank"><i class="fas fa-image"></i> Lihat file SIUP terunggah</a>' : '' ?>
                                     <input type="file" class="form-control" name="file_siup" id="file_siup"
-                                           accept="image/*, application/pdf" <?= $vendor->file_siup_path ? '' : 'required' ?>>
+                                           accept="image/*, application/pdf" <?= ($vendor && $vendor->file_siup_path) ? '' : 'required' ?>>
                                 </div>
                             </div>
 

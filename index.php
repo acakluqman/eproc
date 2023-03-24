@@ -47,13 +47,13 @@ require_once('./config.php');
                         <a href="<?= base_url('tender') ?>" class="nav-link">Tender</a>
                     </li>
                     <?php if (isset($_SESSION['is_login'])) : ?>
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown <?= in_array($_GET['page'], ['profil', 'penawaran']) ? 'active' : '' ?>">
                             <a id="dropdownUser" href="#" data-toggle="dropdown" aria-haspopup="true"
                                aria-expanded="false"
                                class="nav-link dropdown-toggle">Hi, <?= $_SESSION['nama'] ?></a>
                             <ul aria-labelledby="dropdownUser" class="dropdown-menu border-0 shadow">
                                 <li>
-                                    <a href="<?= base_url('app/dashboard') ?>" class="dropdown-item">
+                                    <a href="<?= base_url('penawaran') ?>" class="dropdown-item">
                                         Penawaran Saya
                                     </a>
                                 </li>
