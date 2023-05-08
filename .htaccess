@@ -21,4 +21,7 @@ RewriteRule ^app/tender/tambah$ ./app.php?page=tender_tambah
 RewriteRule ^app/user/admin$ ./app.php?page=user&id_jenis=1
 RewriteRule ^app/user/petugas$ ./app.php?page=user&id_jenis=2
 RewriteRule ^app/user/vendor$ ./app.php?page=user&id_jenis=3
+RewriteRule ^app/user/tambah-admin$ ./app.php?page=user_tambah&id_jenis=1
+RewriteRule ^app/user/tambah-petugas$ ./app.php?page=user_tambah&id_jenis=2
+RewriteRule ^app/user/tambah-vendor$ ./app.php?page=user_tambah&id_jenis=3
 RewriteRule ^app/profil$ ./app.php?page=profil
