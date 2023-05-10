@@ -21,7 +21,7 @@ if ($diff <= 3) {
             if ($updatePassword) {
                 $flash->success('Password berhasil diperbarui. Silahkan login menggunakan password baru Anda!');
 
-                // hapus record reset_password
+                // hapus record reset_password berdasarkan token diatas
                 $sqlHapusToken = $conn->prepare("DELETE FROM reset_password WHERE token = :token");
                 $hapusToken = $sqlHapusToken->execute(['token' => $token]);
                 

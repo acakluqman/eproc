@@ -13,6 +13,7 @@ if (isset($_POST['email'])) {
 
         $conn->beginTransaction();
         try {
+            // simpan token untuk reset password
             $simpanToken = $conn->prepare("INSERT INTO reset_password (email, token) VALUES(:email, :token)");
             $simpanToken->execute(['email' => $email, 'token' => $token]);
 

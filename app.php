@@ -148,6 +148,7 @@ if (!isset($_SESSION['is_login'])) {
                                 </ul>
                             </li>
                         <?php endif ?>
+
                         <li class="nav-item">
                             <a href="<?= base_url('auth/logout') ?>" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
@@ -178,6 +179,13 @@ if (!isset($_SESSION['is_login'])) {
     </div>
 
     <script src="<?= base_url('dist/js/adminlte.min.js') ?>"></script>
+    <script>
+        $(function() {
+            setTimeout(function() {
+                $('.alert').fadeOut();
+            }, 5000);
+        })
+    </script>
 </body>
 
 </html>
