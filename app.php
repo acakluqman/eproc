@@ -5,11 +5,6 @@ if (!isset($_SESSION['is_login'])) {
     header('Location:' . base_url('auth/login'));
     exit();
 }
-
-if (!in_array($_SESSION['jenis_user'], [1, 2])) {
-    header('Location:' . base_url());
-    exit();
-}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -79,7 +74,7 @@ if (!in_array($_SESSION['jenis_user'], [1, 2])) {
             </ul>
         </nav>
 
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <aside class="main-sidebar sidebar-dark-primary">
             <a href="<?= base_url('app/dashboard') ?>" class="brand-link">
                 <img src="<?= base_url('dist/img/uwks.png') ?>" alt="AdminLTE Logo" class="brand-image img-circle">
                 <span class="brand-text font-weight-light">eProcurement</span>
@@ -88,7 +83,7 @@ if (!in_array($_SESSION['jenis_user'], [1, 2])) {
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="<?= base_url('dist/img/user2-160x160.jpg') ?>" class="img-circle elevation-2" alt="User Image">
+                        <img src="<?= base_url('dist/img/user2-160x160.jpg') ?>" class="img-circle" alt="User Image">
                     </div>
                     <div class="info">
                         <a href="#" class="d-block"><?= $_SESSION['nama'] ?></a>
@@ -123,8 +118,8 @@ if (!in_array($_SESSION['jenis_user'], [1, 2])) {
                         </li>
 
                         <?php if ($_SESSION['jenis_user'] == 1) : ?>
-                            <li class="nav-item <?= (isset($_GET['page']) && in_array($_GET['page'], ['user', 'user_tambah'])) ? 'menu-open' : '' ?>">
-                                <a href="#" class="nav-link <?= (isset($_GET['page']) && in_array($_GET['page'], ['user', 'user_tambah'])) ? 'active' : '' ?>">
+                            <li class="nav-item <?= (isset($_GET['page']) && in_array($_GET['page'], ['user', 'user_tambah', 'user_edit'])) ? 'menu-open' : '' ?>">
+                                <a href="#" class="nav-link <?= (isset($_GET['page']) && in_array($_GET['page'], ['user', 'user_tambah', 'user_edit'])) ? 'active' : '' ?>">
                                     <i class="nav-icon fas fa-users"></i>
                                     <p>
                                         DATA PENGGUNA
@@ -133,19 +128,19 @@ if (!in_array($_SESSION['jenis_user'], [1, 2])) {
                                 </a>
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
-                                        <a href="<?= base_url('app/user/admin') ?>" class="nav-link <?= (isset($_GET['page']) && in_array($_GET['page'], ['user', 'user_tambah']) && $_GET['id_jenis'] == 1) ? 'active' : '' ?>">
+                                        <a href="<?= base_url('app/user/admin') ?>" class="nav-link <?= (isset($_GET['page']) && in_array($_GET['page'], ['user', 'user_tambah', 'user_edit']) && $_GET['id_jenis'] == 1) ? 'active' : '' ?>">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Administrator</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="<?= base_url('app/user/petugas') ?>" class="nav-link <?= (isset($_GET['page']) && in_array($_GET['page'], ['user', 'user_tambah']) && $_GET['id_jenis'] == 2) ? 'active' : '' ?>">
+                                        <a href="<?= base_url('app/user/petugas') ?>" class="nav-link <?= (isset($_GET['page']) && in_array($_GET['page'], ['user', 'user_tambah', 'user_edit']) && $_GET['id_jenis'] == 2) ? 'active' : '' ?>">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Petugas LPSE</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="<?= base_url('app/user/vendor') ?>" class="nav-link <?= (isset($_GET['page']) && in_array($_GET['page'], ['user', 'user_tambah']) && $_GET['id_jenis'] == 3) ? 'active' : '' ?>">
+                                        <a href="<?= base_url('app/user/vendor') ?>" class="nav-link <?= (isset($_GET['page']) && in_array($_GET['page'], ['user', 'user_tambah', 'user_edit']) && $_GET['id_jenis'] == 3) ? 'active' : '' ?>">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Vendor</p>
                                         </a>

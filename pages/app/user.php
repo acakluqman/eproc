@@ -1,6 +1,6 @@
 <?php
 // ambil data admin dari database
-$sqlAdmin = $conn->prepare("SELECT * FROM user WHERE jenis_user = :jenis_user ORDER BY nama ASC");
+$sqlAdmin = $conn->prepare("SELECT u.*, v.nama as nama_pt, v.npwp FROM user u LEFT JOIN vendor v ON v.id_vendor = u.id_vendor WHERE u.jenis_user = :jenis_user ORDER BY u.nama ASC");
 $sqlAdmin->execute(['jenis_user' => $_GET['id_jenis']]);
 $admin = $sqlAdmin->fetchAll();
 ?>
@@ -27,9 +27,9 @@ $admin = $sqlAdmin->fetchAll();
     <div class="card">
         <?php
         if ($_GET['id_jenis'] == 1) {
-            echo '<div class="card-header"><h3 class="card-title"><a href="' . base_url('app/user/tambah-admin') . '" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Tambah</a></h3></div>';
+            echo '<div class="card-header"><h3 class="card-title"><a href="' . base_url('app/user/tambah-admin') . '" class="btn btn-primary"><i class="fas fa-plus-circle mr-2"></i>Tambah</a></h3></div>';
         } elseif ($_GET['id_jenis'] == 2) {
-            echo '<div class="card-header"><h3 class="card-title"><a href="' . base_url('app/user/tambah-petugas') . '" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Tambah</a></h3></div>';
+            echo '<div class="card-header"><h3 class="card-title"><a href="' . base_url('app/user/tambah-petugas') . '" class="btn btn-primary"><i class="fas fa-plus-circle mr-2"></i>Tambah</a></h3></div>';
         }
         ?>
 
@@ -40,6 +40,10 @@ $admin = $sqlAdmin->fetchAll();
                         <th class="text-center">No.</th>
                         <th>Nama</th>
                         <th>Email</th>
+                        <?php if ($_GET['id_jenis'] == 3) { ?>
+                            <th>Nama Perusahaan</th>
+                            <th>NPWP</th>
+                        <?php } ?>
                         <th>Tanggal Bergabung</th>
                         <th></th>
                     </tr>
@@ -53,6 +57,10 @@ $admin = $sqlAdmin->fetchAll();
                             <td class="text-center"><?= $no++ . "." ?></td>
                             <td><?= $user['nama'] ?></td>
                             <td><?= $user['email'] ?></td>
+                            <?php if ($_GET['id_jenis'] == 3) { ?>
+                                <td><?= $user['nama_pt'] ?></td>
+                                <td><?= $user['npwp'] ?></td>
+                            <?php } ?>
                             <td><?= tanggal($user['tgl_daftar']) ?></td>
                             <td>
                                 <a href="<?= base_url('app/user/edit/' . md5($user['id_user'])) ?>" class="btn btn-xs btn-success" title="Edit">

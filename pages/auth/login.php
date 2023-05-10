@@ -37,9 +37,7 @@ if (isset($_POST['email'])) {
 
     <form action="" method="post">
         <div class="input-group mb-3">
-            <input type="email" class="form-control" name="email" id="email"
-                   value="<?= isset($_POST['email']) ? $_POST['email'] : '' ?>" placeholder="Email" autofocus
-                   autocomplete="email" required>
+            <input type="email" class="form-control" name="email" id="email" value="<?= isset($_POST['email']) ? $_POST['email'] : '' ?>" placeholder="Email" autofocus autocomplete="email" required>
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-envelope"></span>
@@ -47,8 +45,7 @@ if (isset($_POST['email'])) {
             </div>
         </div>
         <div class="input-group mb-3">
-            <input type="password" class="form-control" name="password" id="password" placeholder="Password"
-                   autocomplete="password" required>
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password" autocomplete="password" required>
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock"></span>
@@ -61,12 +58,12 @@ if (isset($_POST['email'])) {
     </form>
 
     <p class="mb-1">
-        Kembali ke <a href="/">halaman depan</a>
+        Kembali ke <a href="<?= base_url() ?>">halaman depan</a>
     </p>
     <p class="mb-1">
-        Lupa kata sandi? <a href="./password">Klik disini</a>
+        Lupa kata sandi? <a href="<?= base_url('auth/forgot') ?>">Klik disini</a>
     </p>
     <p class="mb-0">
-        Daftar vendor baru? <a href="./register" class="text-center">Klik disini</a>
+        Daftar vendor baru? <a href="<?= base_url('auth/register') ?>" class="text-center">Klik disini</a>
     </p>
 </div>

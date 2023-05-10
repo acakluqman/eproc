@@ -1,4 +1,9 @@
 <?php
+// ambil data satker dari db
+$sqlSatker = $conn->prepare("SELECT * FROM satker ORDER BY nama ASC");
+$sqlSatker->execute();
+$satker = $sqlSatker->fetchAll();
+
 if (isset($_POST['nama'])) {
     // cek email apakah sudah digunakan
     $nama = $_POST['nama'];
@@ -71,10 +76,23 @@ if (isset($_POST['nama'])) {
                     </div>
                 </div>
 
+                <?php if ($_GET['id_jenis'] == 2) : ?>
+                    <div class="form-group row">
+                        <label for="satker" class="col-sm-2 col-form-label">Satuan Kerja</label>
+                        <div class="col-md-6">
+                            <select class="form-control" name="satker" id="satker">
+                                <?php foreach ($satker as $s) : ?>
+                                    <option value="<?= $s['id_satker'] ?>"><?= $s['nama'] ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
+                <?php endif ?>
+
                 <div class="form-group row">
                     <label for="password" class="col-sm-2 col-form-label">Password</label>
                     <div class="col-md-6">
-                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" minlength="6" required>
                     </div>
                 </div>
 
@@ -109,6 +127,8 @@ if (isset($_POST['nama'])) {
 
 <script>
     $(function() {
-
+        $('#satker').select2({
+            theme: 'bootstrap4',
+        });
     })
 </script>

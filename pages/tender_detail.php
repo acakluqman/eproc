@@ -1,18 +1,18 @@
 <?php
 // detail tender
 $detailSql = $conn->prepare("SELECT
-t.*,
-s.nama as nama_satker,
-st.nama as status,
-jt.nama as jenis_tender,
-p.jml_peserta
-FROM tender t
-LEFT JOIN satker s ON s.id_satker = t.id_satker
-LEFT JOIN status_tender st ON st.id_status = t.id_status
-LEFT JOIN jenis_tender jt ON jt.id_jenis = t.id_jenis
-LEFT JOIN (SELECT id_tender, COUNT(*) as jml_peserta FROM tender_peserta GROUP BY id_tender) p ON p.id_tender = t.id_tender
-WHERE t.id_tender = '" . $_GET['id_tender'] . "'
-ORDER BY t.tgl_buat DESC");
+    t.*,
+    s.nama as nama_satker,
+    st.nama as status,
+    jt.nama as jenis_tender,
+    p.jml_peserta
+    FROM tender t
+    LEFT JOIN satker s ON s.id_satker = t.id_satker
+    LEFT JOIN status_tender st ON st.id_status = t.id_status
+    LEFT JOIN jenis_tender jt ON jt.id_jenis = t.id_jenis
+    LEFT JOIN (SELECT id_tender, COUNT(*) as jml_peserta FROM tender_peserta GROUP BY id_tender) p ON p.id_tender = t.id_tender
+    WHERE t.id_tender = '" . $_GET['id_tender'] . "'
+    ORDER BY t.tgl_buat DESC");
 $detailSql->execute();
 $detail = $detailSql->fetch();
 
@@ -148,22 +148,22 @@ $peserta = $pesertaSql->fetchAll();
                             <div class="tab-pane" id="peserta">
                                 <table class="table table-striped">
                                     <thead>
-                                    <tr>
-                                        <th class="text-center" style="width: 5%;">No.</th>
-                                        <th>Nama Peserta</th>
-                                        <th>NPWP</th>
-                                        <th>Harga Penawaran</th>
-                                    </tr>
+                                        <tr>
+                                            <th class="text-center" style="width: 5%;">No.</th>
+                                            <th>Nama Peserta</th>
+                                            <th>NPWP</th>
+                                            <th>Harga Penawaran</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    <?php foreach ($peserta as $key => $p): ?>
-                                        <tr>
-                                            <td class="text-center"><?= $key + 1 ?>.</td>
-                                            <td><?= $p['nama'] ?></td>
-                                            <td><?= $p['npwp'] ?></td>
-                                            <td><?= rupiah($p['harga_penawaran']) ?></td>
-                                        </tr>
-                                    <?php endforeach ?>
+                                        <?php foreach ($peserta as $key => $p) : ?>
+                                            <tr>
+                                                <td class="text-center"><?= $key + 1 ?>.</td>
+                                                <td><?= $p['nama'] ?></td>
+                                                <td><?= $p['npwp'] ?></td>
+                                                <td><?= rupiah($p['harga_penawaran']) ?></td>
+                                            </tr>
+                                        <?php endforeach ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -171,109 +171,108 @@ $peserta = $pesertaSql->fetchAll();
                             <div class="tab-pane" id="evaluasi">
                                 <table class="table table-striped">
                                     <thead>
-                                    <tr>
-                                        <th class="text-center" style="width: 5%;">No.</th>
-                                        <th>Nama Peserta</th>
-                                        <th title="Harga Penawaran">
-                                            Harga Penawaran
-                                        </th>
-                                        <th class="text-center" title="Evaluasi Kualifikasi" style="width: 5%;">
-                                            <span class="badge badge-danger">K</span>
-                                        </th>
-                                        <th class="text-center" title="Pembuktian Kualifikasi" style="width: 5%;">
-                                            <span class="badge badge-danger">B</span>
-                                        </th>
-                                        <th class="text-center" title="Evaluasi Administrasi" style="width: 5%;">
-                                            <span class="badge badge-info">A</span>
-                                        </th>
-                                        <th class="text-center" title="Evaluasi Teknis" style="width: 5%;">
-                                            <span class="badge badge-info">T</span>
-                                        </th>
-                                        <th class="text-center" title="Evaluasi Harga dan Biaya"
-                                            style="width: 5%;">
-                                            <span class="badge badge-success">H</span>
-                                        </th>
-                                        <th class="text-center" title="Pemenang" style="width: 5%;">
-                                            <span class="badge badge-warning">P</span>
-                                        </th>
-                                        <th>Keterangan</th>
-                                    </tr>
+                                        <tr>
+                                            <th class="text-center" style="width: 5%;">No.</th>
+                                            <th>Nama Peserta</th>
+                                            <th title="Harga Penawaran">
+                                                Harga Penawaran
+                                            </th>
+                                            <th class="text-center" title="Evaluasi Kualifikasi" style="width: 5%;">
+                                                <span class="badge badge-danger">K</span>
+                                            </th>
+                                            <th class="text-center" title="Pembuktian Kualifikasi" style="width: 5%;">
+                                                <span class="badge badge-danger">B</span>
+                                            </th>
+                                            <th class="text-center" title="Evaluasi Administrasi" style="width: 5%;">
+                                                <span class="badge badge-info">A</span>
+                                            </th>
+                                            <th class="text-center" title="Evaluasi Teknis" style="width: 5%;">
+                                                <span class="badge badge-info">T</span>
+                                            </th>
+                                            <th class="text-center" title="Evaluasi Harga dan Biaya" style="width: 5%;">
+                                                <span class="badge badge-success">H</span>
+                                            </th>
+                                            <th class="text-center" title="Pemenang" style="width: 5%;">
+                                                <span class="badge badge-warning">P</span>
+                                            </th>
+                                            <th>Keterangan</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    <?php foreach ($peserta as $key => $p): ?>
-                                        <tr>
-                                            <td class="text-center"><?= $key + 1 ?>.</td>
-                                            <td>
-                                                <?= $p['nama'] ?>
-                                            </td>
-                                            <td class="align-middle">
-                                                <?= rupiah($p['harga_penawaran']) ?>
-                                            </td>
-                                            <td class="text-center align-middle">
-                                                <?php
-                                                if (is_null($p['is_kualifikasi'])) {
-                                                    echo '<i class="fas fa-minus-circle text-muted"></i>';
-                                                } elseif ($p['is_kualifikasi']) {
-                                                    echo '<i class="fas fa-check-circle text-success"></i>';
-                                                } else {
-                                                    echo '<i class="fas fa-times-circle text-danger"></i>';
-                                                }
-                                                ?>
-                                            </td>
-                                            <td class="text-center align-middle">
-                                                <?php
-                                                if (is_null($p['is_bukti_kualifikasi'])) {
-                                                    echo '<i class="fas fa-minus-circle text-muted"></i>';
-                                                } elseif ($p['is_bukti_kualifikasi']) {
-                                                    echo '<i class="fas fa-check-circle text-success"></i>';
-                                                } else {
-                                                    echo '<i class="fas fa-times-circle text-danger"></i>';
-                                                }
-                                                ?>
-                                            </td>
-                                            <td class="text-center align-middle">
-                                                <?php
-                                                if (is_null($p['is_eval_administrasi'])) {
-                                                    echo '<i class="fas fa-minus-circle text-muted"></i>';
-                                                } elseif ($p['is_eval_administrasi']) {
-                                                    echo '<i class="fas fa-check-circle text-success"></i>';
-                                                } else {
-                                                    echo '<i class="fas fa-times-circle text-danger"></i>';
-                                                }
-                                                ?>
-                                            </td>
-                                            <td class="text-center align-middle">
-                                                <?php
-                                                if (is_null($p['is_eval_teknis'])) {
-                                                    echo '<i class="fas fa-minus-circle text-muted"></i>';
-                                                } elseif ($p['is_eval_teknis']) {
-                                                    echo '<i class="fas fa-check-circle text-success"></i>';
-                                                } else {
-                                                    echo '<i class="fas fa-times-circle text-danger"></i>';
-                                                }
-                                                ?>
-                                            </td>
-                                            <td class="text-center align-middle">
-                                                <?php
-                                                if (is_null($p['is_eval_harga'])) {
-                                                    echo '<i class="fas fa-minus-circle text-muted"></i>';
-                                                } elseif ($p['is_eval_harga']) {
-                                                    echo '<i class="fas fa-check-circle text-success"></i>';
-                                                } else {
-                                                    echo '<i class="fas fa-times-circle text-danger"></i>';
-                                                }
-                                                ?>
-                                            </td>
-                                            <td class="text-center align-middle">
-                                                <?php
-                                                if ($p['is_pemenang']) {
-                                                    echo '<i class="fas fa-check-circle text-success"></i>';
-                                                }
-                                                ?>
-                                            </td>
-                                            <td><?= $p['keterangan'] ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
+                                        <?php foreach ($peserta as $key => $p) : ?>
+                                            <tr>
+                                                <td class="text-center"><?= $key + 1 ?>.</td>
+                                                <td>
+                                                    <?= $p['nama'] ?>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <?= rupiah($p['harga_penawaran']) ?>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <?php
+                                                    if (is_null($p['is_kualifikasi'])) {
+                                                        echo '<i class="fas fa-minus-circle text-muted"></i>';
+                                                    } elseif ($p['is_kualifikasi']) {
+                                                        echo '<i class="fas fa-check-circle text-success"></i>';
+                                                    } else {
+                                                        echo '<i class="fas fa-times-circle text-danger"></i>';
+                                                    }
+                                                    ?>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <?php
+                                                    if (is_null($p['is_bukti_kualifikasi'])) {
+                                                        echo '<i class="fas fa-minus-circle text-muted"></i>';
+                                                    } elseif ($p['is_bukti_kualifikasi']) {
+                                                        echo '<i class="fas fa-check-circle text-success"></i>';
+                                                    } else {
+                                                        echo '<i class="fas fa-times-circle text-danger"></i>';
+                                                    }
+                                                    ?>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <?php
+                                                    if (is_null($p['is_eval_administrasi'])) {
+                                                        echo '<i class="fas fa-minus-circle text-muted"></i>';
+                                                    } elseif ($p['is_eval_administrasi']) {
+                                                        echo '<i class="fas fa-check-circle text-success"></i>';
+                                                    } else {
+                                                        echo '<i class="fas fa-times-circle text-danger"></i>';
+                                                    }
+                                                    ?>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <?php
+                                                    if (is_null($p['is_eval_teknis'])) {
+                                                        echo '<i class="fas fa-minus-circle text-muted"></i>';
+                                                    } elseif ($p['is_eval_teknis']) {
+                                                        echo '<i class="fas fa-check-circle text-success"></i>';
+                                                    } else {
+                                                        echo '<i class="fas fa-times-circle text-danger"></i>';
+                                                    }
+                                                    ?>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <?php
+                                                    if (is_null($p['is_eval_harga'])) {
+                                                        echo '<i class="fas fa-minus-circle text-muted"></i>';
+                                                    } elseif ($p['is_eval_harga']) {
+                                                        echo '<i class="fas fa-check-circle text-success"></i>';
+                                                    } else {
+                                                        echo '<i class="fas fa-times-circle text-danger"></i>';
+                                                    }
+                                                    ?>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <?php
+                                                    if ($p['is_pemenang']) {
+                                                        echo '<i class="fas fa-check-circle text-success"></i>';
+                                                    }
+                                                    ?>
+                                                </td>
+                                                <td><?= $p['keterangan'] ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                                 <br>
