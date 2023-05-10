@@ -86,11 +86,9 @@ $tender = $tenderSql->fetchAll();
 
     <div class="card">
         <div class="card-header">
-            <div class="card-tools">
-                <a href="<?= base_url('app/tender/tambah') ?>" class="btn btn-primary">
-                    <i class="fas fa-plus-circle mr-2"></i> Tambah Tender
-                </a>
-            </div>
+            <a href="<?= base_url('app/tender/tambah') ?>" class="btn btn-primary">
+                <i class="fas fa-plus-circle mr-2"></i> Tambah Tender
+            </a>
         </div>
 
         <div class="card-body table-responsive">
