@@ -15,6 +15,8 @@ RewriteRule ^tender/detail/([0-9]*)$ ./index.php?page=tender_detail&id_tender=$1
 
 RewriteRule ^app/dashboard$ ./app.php?page=dashboard
 
+RewriteRule ^app/satker$ ./app.php?page=satker
+
 RewriteRule ^app/tender$ ./app.php?page=tender
 RewriteRule ^app/tender/detail/([0-9]*)$ ./app.php?page=tender_detail&id_tender=$1
 RewriteRule ^app/tender/tambah$ ./app.php?page=tender_tambah

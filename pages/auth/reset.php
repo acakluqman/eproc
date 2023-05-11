@@ -1,6 +1,6 @@
 <?php
 // cek token
-$token = $_GET['token'];
+$token = escape($_GET['token']);
 
 $sqlCekToken = $conn->prepare("SELECT * FROM reset_password WHERE token = :token");
 $sqlCekToken->execute(['token' => $token]);
@@ -10,8 +10,8 @@ $diff = round(abs(strtotime('now') - strtotime($reset->tgl_reset)) / 3600, 1);
 
 if ($diff <= 3) {
     if (isset($_POST['reset'])) {
-        $password = $_POST['password'];
-        $konfirmasi = $_POST['konfirmasi'];
+        $password = escape($_POST['password']);
+        $konfirmasi = escape($_POST['konfirmasi']);
 
         if ($password == $konfirmasi) {
             // update password
@@ -24,7 +24,7 @@ if ($diff <= 3) {
                 // hapus record reset_password berdasarkan token diatas
                 $sqlHapusToken = $conn->prepare("DELETE FROM reset_password WHERE token = :token");
                 $hapusToken = $sqlHapusToken->execute(['token' => $token]);
-                
+
                 header('Location:' . base_url('auth/login'));
                 exit();
             } else {

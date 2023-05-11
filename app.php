@@ -5,6 +5,12 @@ if (!isset($_SESSION['is_login'])) {
     header('Location:' . base_url('auth/login'));
     exit();
 }
+
+// cek status pendaftaran vendor
+if (!cekStatusPendaftaranVendor() && $_GET['page'] != 'profil') {
+    header('Location:' . base_url('app/profil'));
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -67,7 +73,7 @@ if (!isset($_SESSION['is_login'])) {
                 </li>
                 <li class="nav-item dropdown user-menu">
                     <a href="<?= base_url('app/profil') ?>" class="nav-link">
-                        <img src="<?= base_url('dist/img/user2-160x160.jpg') ?>" class="user-image img-circle" alt="<?= $_SESSION['nama'] ?>">
+                        <img src="https://ui-avatars.com/api/?background=a0a0a0&color=fff&name=<?= $_SESSION['nama'] ?>&format=svg&bold=true" class="user-image img-circle" alt="<?= $_SESSION['nama'] ?>">
                         <span class="d-none d-md-inline"><?= $_SESSION['nama'] ?></span>
                     </a>
                 </li>
@@ -83,7 +89,7 @@ if (!isset($_SESSION['is_login'])) {
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="<?= base_url('dist/img/user2-160x160.jpg') ?>" class="img-circle" alt="User Image">
+                        <img src="https://ui-avatars.com/api/?background=a0a0a0&color=fff&name=<?= $_SESSION['nama'] ?>&format=svg&bold=true" class="img-circle" alt="User Image">
                     </div>
                     <div class="info">
                         <a href="#" class="d-block"><?= $_SESSION['nama'] ?></a>
@@ -118,6 +124,24 @@ if (!isset($_SESSION['is_login'])) {
                         </li>
 
                         <?php if ($_SESSION['jenis_user'] == 1) : ?>
+                            <li class="nav-item <?= (isset($_GET['page']) && in_array($_GET['page'], ['satker'])) ? 'menu-open' : '' ?>">
+                                <a href="#" class="nav-link <?= (isset($_GET['page']) && in_array($_GET['page'], ['satker'])) ? 'active' : '' ?>">
+                                    <i class="nav-icon fas fa-database"></i>
+                                    <p>
+                                        DATA MASTER
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="<?= base_url('app/satker') ?>" class="nav-link <?= (isset($_GET['page']) && $_GET['page'] == 'satker') ? 'active' : '' ?>">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Satuan Kerja</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
                             <li class="nav-item <?= (isset($_GET['page']) && in_array($_GET['page'], ['user', 'user_tambah', 'user_edit'])) ? 'menu-open' : '' ?>">
                                 <a href="#" class="nav-link <?= (isset($_GET['page']) && in_array($_GET['page'], ['user', 'user_tambah', 'user_edit'])) ? 'active' : '' ?>">
                                     <i class="nav-icon fas fa-users"></i>
@@ -173,12 +197,17 @@ if (!isset($_SESSION['is_login'])) {
             <div class="float-right d-none d-sm-inline">
                 eProcurement
             </div>
-            <strong>&copy; <?= date('Y') ?> <a href="https://www.uwks.ac.id/">Universitas Wijaya Kusuma
-                    Surabaya</a>.</strong> All rights reserved.
+            <strong>
+                &copy; <?= date('Y') ?> <a href="https://www.uwks.ac.id/">
+                    Universitas Wijaya Kusuma Surabaya</a>.
+            </strong>
+            All rights reserved.
         </footer>
     </div>
 
     <script src="<?= base_url('dist/js/adminlte.min.js') ?>"></script>
+    <script src="<?= base_url('plugins/inputmask/jquery.inputmask.min.js') ?>"></script>
+
     <script>
         $(function() {
             setTimeout(function() {

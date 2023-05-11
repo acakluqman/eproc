@@ -32,7 +32,9 @@ function token($length = 25)
 
 function escape($html)
 {
-    return htmlspecialchars($html, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");
+    $data = str_replace("'", "", trim($html));
+
+    return htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");
 }
 
 function templateEmails($data)
@@ -44,6 +46,24 @@ function templateEmails($data)
     }
 
     return $html;
+}
+
+function cekStatusPendaftaranVendor()
+{
+    global $conn;
+    $result = false;
+
+    if ($_SESSION['jenis_user'] == 3 && $_SESSION['id_vendor']) {
+        $sqlVendor = $conn->prepare("SELECT * FROM vendor WHERE id_vendor = :id_vendor");
+        $sqlVendor->execute(['id_vendor' => $_SESSION['id_vendor']]);
+        $vendor = $sqlVendor->fetchObject();
+
+        if (!empty($vendor->nama) && !empty($vendor->alamat) && !empty($vendor->nama_pemilik) && !empty($vendor->nik_pemilik) && !empty($vendor->nama_pemilik) && !empty($vendor->nik_pemilik) && !empty($vendor->file_ktp_path) && !empty($vendor->npwp) && !empty($vendor->nama_npwp) && !empty($vendor->file_npwp_path) && !empty($vendor->no_siup) && !empty($vendor->file_siup_path) && !empty($vendor->no_nib)) {
+            $result = true;
+        }
+    }
+
+    return $result;
 }
 
 function templateEmail($data)
@@ -58,7 +78,14 @@ function templateEmail($data)
     $html .= '<div style="padding: 20px;"><center><img src="' . base_url('dist/img/uwks.png') . '" alt="logo" height="70px"></center><div>';
 
     $html .= '<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body" style="padding-top: 20px; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f6f6f6; width: 100%;" width="100%" bgcolor="#f6f6f6"> <tr> <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;" valign="top">&nbsp;</td><td class="container" style="font-family: sans-serif; font-size: 14px; vertical-align: top; display: block; max-width: 580px; padding: 10px; width: 580px; margin: 0 auto;" width="580" valign="top"> <div class="content" style="box-sizing: border-box; display: block; margin: 0 auto; max-width: 580px; padding: 10px;">';
-    $html .= '<table role="presentation" class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background: #ffffff; border-radius: 3px; width: 100%;" width="100%"> <tr> <td class="wrapper" style="font-family: sans-serif; font-size: 14px; vertical-align: top; box-sizing: border-box; padding: 20px;" valign="top"> <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;" width="100%"> <tr> <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;" valign="top">';
+
+    // content
+    $html .= '<table role="presentation" class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background: #ffffff; border-radius: 3px; width: 100%;" width="100%">';
+    $html .= '<tr>';
+    $html .= '<td class="wrapper" style="font-family: sans-serif; font-size: 14px; vertical-align: top; box-sizing: border-box; padding: 20px;" valign="top">';
+    $html .= '<table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;" width="100%">';
+    $html .= '<tr>';
+    $html .= '<td style="font-family: sans-serif; font-size: 14px; vertical-align: top;" valign="top">';
 
     // nama user
     $html .= '<p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Hai ' . $data['nama'] ?: '' . '...</p>';
@@ -70,15 +97,18 @@ function templateEmail($data)
 
     // button
     if (isset($data['btn_text']) && isset($data['btn_link'])) {
-        $html .= '<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-sizing: border-box; width: 100%;" width="100%"> <tbody> <tr> <td align="left" style="font-family: sans-serif; font-size: 14px; vertical-align: top; padding-bottom: 15px;" valign="top"> <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: auto;"> <tbody> <tr>';
+        $html .= '<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-sizing: border-box; width: 100%;" width="100%">';
+        $html .= '<tbody><tr><td align="left" style="font-family: sans-serif; font-size: 14px; vertical-align: top; padding-bottom: 15px;" valign="top">';
+        $html .= '<table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: auto;"><tbody><tr>';
         $html .= '<td style="font-family: sans-serif; font-size: 14px; vertical-align: top; border-radius: 5px; text-align: center; background-color: #3498db;" valign="top" align="center" bgcolor="#3498db"> <a href="' . $data['btn_link'] . '" target="_blank" style="border: solid 1px #3498db; border-radius: 5px; box-sizing: border-box; cursor: pointer; display: inline-block; font-size: 14px; font-weight: bold; margin: 0; padding: 12px 25px; text-decoration: none; text-transform: capitalize; background-color: #3498db; border-color: #3498db; color: #ffffff;">' . $data['btn_text'] . '</a> </td>';
-        $html .= '</tr></tbody> </table> </td></tr></tbody> </table>';
+        $html .= '</tr></tbody></table></td></tr></tbody></table>';
     }
 
-    // footer
     $html .= '<p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Email ini dikirim otomatis, mohon untuk tidak membalas email ini.</p>';
     $html .= '<p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Terima kasih</p>';
     $html .= '</td></tr></table>';
+
+    // footer
     $html .= '</td></tr></table> <div class="footer" style="clear: both; margin-top: 10px; text-align: center; width: 100%;"> <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;" width="100%"> <tr> <td class="content-block" style="font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; color: #999999; font-size: 12px; text-align: center;" valign="top" align="center"> <span class="apple-link" style="color: #999999; font-size: 12px; text-align: center;">Universitas Wijaya Kusuma Surabaya</span> <br>Jl. Dukuh Kupang XXV No.54, Dukuh Kupang, Kec. Dukuhpakis, Kota SBY, Jawa Timur 60225 </td></tr>';
     $html .= '<tr><td class="content-block powered-by" style="font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; color: #999999; font-size: 12px; text-align: center;" valign="top" align="center">';
     $html .= '<a href="' . base_url() . '" style="color: #999999; font-size: 12px; text-align: center; text-decoration: none;">eProcurement Online System</a>. </td></tr></table> </div></div></td><td style="font-family: sans-serif; font-size: 14px; vertical-align: top;" valign="top">&nbsp;</td></tr></table> </body> </html>';

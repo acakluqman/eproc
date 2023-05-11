@@ -1,7 +1,7 @@
 <?php
 if (isset($_POST['email'])) {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = escape($_POST['email']);
+    $password = escape($_POST['password']);
 
     $login = $conn->prepare("SELECT * FROM user WHERE email = :email");
     $login->execute(['email' => $email]);
@@ -16,11 +16,7 @@ if (isset($_POST['email'])) {
             $_SESSION['jenis_user'] = $user->jenis_user;
             $_SESSION['id_vendor'] = $user->id_vendor;
 
-            if ($user->jenis_user == 3) {
-                header("Location: " . base_url());
-            } else {
-                header("Location: " . base_url('app/dashboard'));
-            }
+            header("Location: " . base_url('app/dashboard'));
         } else {
             $flash->warning('Akun tidak ditemukan. Periksa kembali email dan kata sandi Anda!');
         }
@@ -36,22 +32,14 @@ if (isset($_POST['email'])) {
     <?= $flash->display() ?>
 
     <form action="" method="post">
-        <div class="input-group mb-3">
+        <div class="form-group mb-3">
             <input type="email" class="form-control" name="email" id="email" value="<?= isset($_POST['email']) ? $_POST['email'] : '' ?>" placeholder="Email" autofocus autocomplete="email" required>
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-envelope"></span>
-                </div>
-            </div>
         </div>
-        <div class="input-group mb-3">
+
+        <div class="form-group mb-3">
             <input type="password" class="form-control" name="password" id="password" placeholder="Password" autocomplete="password" required>
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-lock"></span>
-                </div>
-            </div>
         </div>
+
         <div class="input-group mb-3">
             <button type="submit" class="btn btn-primary btn-block">MASUK</button>
         </div>

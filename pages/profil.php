@@ -3,7 +3,7 @@ $vendorSql = $conn->prepare("SELECT * FROM vendor WHERE id_vendor = :id_vendor")
 $vendorSql->execute(['id_vendor' => $_SESSION['id_vendor']]);
 $vendor = $vendorSql->fetchObject();
 
-if (sizeof($_POST) > 0) {
+if (isset($_POST)) {
     if (isset($_POST['profil'])) {
         try {
             $updateSql = $conn->prepare("UPDATE user SET nama = :nama, email = :email WHERE id_user = :id_user");
@@ -185,17 +185,12 @@ if (sizeof($_POST) > 0) {
                         <form action="" class="form" method="post">
                             <div class="form-group">
                                 <label for="nama">Nama Lengkap</label>
-                                <input type="text" class="form-control" id="nama" name="nama"
-                                       placeholder="Nama Lengkap" value="<?= $_SESSION['nama'] ?>" autocomplete="nama"
-                                       minlength="6"
-                                       required>
+                                <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Lengkap" value="<?= $_SESSION['nama'] ?>" autocomplete="nama" minlength="6" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="email">Alamat Email</label>
-                                <input type="email" class="form-control" id="email" name="email"
-                                       placeholder="Alamat Email" value="<?= $_SESSION['email'] ?>" autocomplete="email"
-                                       required inputmode="email">
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Alamat Email" value="<?= $_SESSION['email'] ?>" autocomplete="email" required inputmode="email">
                             </div>
 
                             <div class="form-group">
@@ -211,79 +206,59 @@ if (sizeof($_POST) > 0) {
                         <form action="" class="form" method="post" enctype="multipart/form-data">
                             <div class="form-group">
                                 <label for="nama">Nama Perusahaan</label>
-                                <input type="text" class="form-control" id="nama" name="nama"
-                                       placeholder="Nama Perusahaan" value="<?= $vendor ? $vendor->nama : '' ?>"
-                                       autocomplete="nama" required>
+                                <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Perusahaan" value="<?= $vendor ? $vendor->nama : '' ?>" autocomplete="nama" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="alamat">Alamat</label>
-                                <input type="text" class="form-control" id="alamat" name="alamat"
-                                       placeholder="Alamat Perusahaan" value="<?= $vendor ? $vendor->alamat : '' ?>"
-                                       autocomplete="alamat" required>
+                                <input type="text" class="form-control" id="alamat" name="alamat" placeholder="Alamat Perusahaan" value="<?= $vendor ? $vendor->alamat : '' ?>" autocomplete="alamat" required>
                             </div>
 
                             <div class="form-group row">
                                 <div class="col-md-4">
                                     <label for="nama_pemilik">Nama Pemilik</label>
-                                    <input type="text" class="form-control" id="nama_pemilik" name="nama_pemilik"
-                                           placeholder="Nama Pemilik"
-                                           value="<?= $vendor ? $vendor->nama_pemilik : '' ?>"
-                                           autocomplete="nama_pemilik" required>
+                                    <input type="text" class="form-control" id="nama_pemilik" name="nama_pemilik" placeholder="Nama Pemilik" value="<?= $vendor ? $vendor->nama_pemilik : '' ?>" autocomplete="nama_pemilik" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="nik_pemilik">NIK Pemilik</label>
-                                    <input type="number" class="form-control" id="nik_pemilik" name="nik_pemilik"
-                                           placeholder="NIK Pemilik" value="<?= $vendor ? $vendor->nik_pemilik : '' ?>"
-                                           autocomplete="nik_pemilik" minlength="16" maxlength="16" required>
+                                    <input type="number" class="form-control" id="nik_pemilik" name="nik_pemilik" placeholder="NIK Pemilik" value="<?= $vendor ? $vendor->nik_pemilik : '' ?>" autocomplete="nik_pemilik" minlength="16" maxlength="16" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="file_ktp">File KTP</label>
                                     <?= ($vendor && $vendor->file_ktp_path) ? '<a href="' . base_url($vendor->file_ktp_path) . '" target="_blank"><i class="fas fa-image"></i> Lihat file KTP terunggah</a>' : '' ?>
-                                    <input type="file" class="form-control" name="file_ktp" id="file_ktp"
-                                           accept="image/*" <?= ($vendor && $vendor->file_ktp_path) ? '' : 'required' ?>>
+                                    <input type="file" class="form-control" name="file_ktp" id="file_ktp" accept="image/*" <?= ($vendor && $vendor->file_ktp_path) ? '' : 'required' ?>>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <div class="col-md-4">
                                     <label for="nama_npwp">Nama di NPWP</label>
-                                    <input type="text" class="form-control" id="nama_npwp" name="nama_npwp"
-                                           placeholder="Nama di NPWP" value="<?= $vendor ? $vendor->nama_npwp : '' ?>"
-                                           autocomplete="nama_npwp" required>
+                                    <input type="text" class="form-control" id="nama_npwp" name="nama_npwp" placeholder="Nama di NPWP" value="<?= $vendor ? $vendor->nama_npwp : '' ?>" autocomplete="nama_npwp" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="npwp">NPWP</label>
-                                    <input type="text" class="form-control" id="npwp" name="npwp"
-                                           placeholder="NPWP Perusahaan" value="<?= $vendor ? $vendor->npwp : '' ?>"
-                                           autocomplete="npwp" minlength="16" maxlength="25" required>
+                                    <input type="text" class="form-control" id="npwp" name="npwp" placeholder="NPWP Perusahaan" value="<?= $vendor ? $vendor->npwp : '' ?>" autocomplete="npwp" minlength="16" maxlength="25" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="file_npwp">File NPWP</label>
                                     <?= ($vendor && $vendor->file_npwp_path) ? '<a href="' . base_url($vendor->file_npwp_path) . '" target="_blank"><i class="fas fa-image"></i> Lihat file NPWP terunggah</a>' : '' ?>
-                                    <input type="file" class="form-control" name="file_npwp" id="file_npwp"
-                                           accept="image/*" <?= ($vendor && $vendor->file_npwp_path) ? '' : 'required' ?>>
+                                    <input type="file" class="form-control" name="file_npwp" id="file_npwp" accept="image/*" <?= ($vendor && $vendor->file_npwp_path) ? '' : 'required' ?>>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <div class="col-md-4">
                                     <label for="nib">Nomor NIB</label>
-                                    <input type="text" class="form-control" id="nib" name="nib"
-                                           placeholder="Nomor NIB" value="<?= $vendor ? $vendor->no_nib : '' ?>"
-                                           autocomplete="nib" minlength="15" maxlength="15" required>
+                                    <input type="text" class="form-control" id="nib" name="nib" placeholder="Nomor NIB" value="<?= $vendor ? $vendor->no_nib : '' ?>" autocomplete="nib" minlength="15" maxlength="15" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="siup">Nomor SIUP</label>
-                                    <input type="text" class="form-control" id="siup" name="siup"
-                                           placeholder="Nomor SIUP" value="<?= $vendor ? $vendor->no_siup : '' ?>"
-                                           autocomplete="siup" minlength="15" maxlength="15" required>
+                                    <input type="text" class="form-control" id="siup" name="siup" placeholder="Nomor SIUP" value="<?= $vendor ? $vendor->no_siup : '' ?>" autocomplete="siup" minlength="15" maxlength="15" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="file_siup">File SIUP</label>
                                     <?= ($vendor && $vendor->file_siup_path) ? '<a href="' . base_url($vendor->file_siup_path) . '" target="_blank"><i class="fas fa-image"></i> Lihat file SIUP terunggah</a>' : '' ?>
-                                    <input type="file" class="form-control" name="file_siup" id="file_siup"
-                                           accept="image/*, application/pdf" <?= ($vendor && $vendor->file_siup_path) ? '' : 'required' ?>>
+                                    <input type="file" class="form-control" name="file_siup" id="file_siup" accept="image/*, application/pdf" <?= ($vendor && $vendor->file_siup_path) ? '' : 'required' ?>>
                                 </div>
                             </div>
 
@@ -300,22 +275,17 @@ if (sizeof($_POST) > 0) {
                         <form action="" class="form" method="post">
                             <div class="form-group">
                                 <label for="old">Password Saat Ini</label>
-                                <input type="password" class="form-control" id="old" name="old"
-                                       placeholder="Password Saat Ini" autocomplete="old-password" minlength="6"
-                                       required>
+                                <input type="password" class="form-control" id="old" name="old" placeholder="Password Saat Ini" autocomplete="old-password" minlength="6" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="new">Password Baru</label>
-                                <input type="password" class="form-control" id="new" name="new"
-                                       placeholder="Password Baru" autocomplete="new-password" minlength="6" required>
+                                <input type="password" class="form-control" id="new" name="new" placeholder="Password Baru" autocomplete="new-password" minlength="6" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="confirm">Konfirmasi Password</label>
-                                <input type="password" class="form-control" id="confirm" name="confirm"
-                                       placeholder="Konfirmasi Password Baru" autocomplete="confirm-password"
-                                       minlength="6" required>
+                                <input type="password" class="form-control" id="confirm" name="confirm" placeholder="Konfirmasi Password Baru" autocomplete="confirm-password" minlength="6" required>
                             </div>
 
                             <div class="form-group">
@@ -332,6 +302,5 @@ if (sizeof($_POST) > 0) {
 </div>
 
 <script>
-    $(function () {
-    })
+    $(function() {})
 </script>

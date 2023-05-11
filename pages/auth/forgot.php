@@ -2,7 +2,7 @@
 
 if (isset($_POST['email'])) {
     // cek email di db
-    $email = $_POST['email'];
+    $email = escape($_POST['email']);
 
     $sqlCekEmail = $conn->prepare("SELECT nama, email FROM user WHERE email = :email");
     $sqlCekEmail->execute(['email' => $email]);

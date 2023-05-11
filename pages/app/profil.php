@@ -6,6 +6,16 @@ $sqlUser = $conn->prepare("SELECT * FROM user WHERE id_user = :id_user");
 $sqlUser->execute(['id_user' => $id_user]);
 $user = $sqlUser->fetchObject();
 
+// ambil data vendor
+$vendor = [];
+if ($_SESSION['jenis_user'] == 3 && !is_null($_SESSION['id_vendor'])) {
+    $id_vendor = $_SESSION['id_vendor'];
+    $sqlVendor = $conn->prepare("SELECT * FROM vendor WHERE id_vendor = :id_vendor");
+    $sqlVendor->execute(['id_vendor' => $id_vendor]);
+
+    $vendor = $sqlVendor->fetchObject();
+}
+
 // perbarui data profil user
 if (isset($_POST['profil'])) {
     $id_user = $_POST['id_user'];
@@ -57,6 +67,47 @@ if (isset($_POST['profil'])) {
     header('Location:' . base_url('app/profil'));
     exit();
 }
+
+// perbarui data vendor
+if (isset($_POST['vendor'])) {
+    $id_vendor = $_SESSION['id_vendor'];
+    $nama = escape($_POST['nama_perusahaan']);
+    $alamat = escape($_POST['alamat_perusahaan']);
+    $nama_pemilik = escape($_POST['nama_pemilik']);
+    $nik_pemilik = escape($_POST['nik_pemilik']);
+    $npwp = escape($_POST['npwp']);
+    $nama_npwp = escape($_POST['nama_npwp']);
+    $nib = escape($_POST['nib']);
+    $siup = escape($_POST['siup']);
+
+    if (strlen(str_replace('_', '', $nik_pemilik)) != 16) {
+        $flash->warning('Format NIK tidak valid!');
+    } elseif (strlen(str_replace('_', '', $npwp)) != 20) {
+        $flash->warning('Format NPWP tidak valid!');
+    } else {
+        $sqlUpdateVendor = $conn->prepare("UPDATE vendor SET nama = :nama, alamat = :alamat, nama_pemilik = :nama_pemilik, nik_pemilik = :nik_pemilik, npwp = :npwp, nama_npwp = :nama_npwp, no_siup = :no_siup, no_nib = :no_nib WHERE id_vendor = :id_vendor");
+        $update = $sqlUpdateVendor->execute([
+            'id_vendor' => $id_vendor,
+            'nama' => strtoupper($nama),
+            'alamat' => $alamat,
+            'nama_pemilik' => $nama_pemilik,
+            'nik_pemilik' => str_replace('_', '', $nik_pemilik),
+            'npwp' => str_replace('_', '', $npwp),
+            'nama_npwp' => $nama_npwp,
+            'no_siup' => sprintf("%015d", str_replace('_', '', $siup)),
+            'no_nib' => sprintf("%015d", str_replace('_', '', $nib)),
+        ]);
+
+        if ($update) {
+            $flash->success('Berhasil memperbarui data vendor!');
+        } else {
+            $flash->success('Gagal memperbarui data vendor. Silahkan ulangi kembali!');
+        }
+    }
+
+    header('Location:' . base_url('app/profil'));
+    exit();
+}
 ?>
 <section class="content-header">
     <div class="container-fluid">
@@ -72,11 +123,26 @@ if (isset($_POST['profil'])) {
     <div class="container-fluid">
         <?= $flash->display() ?>
         <div class="row">
+            <?php if (!cekStatusPendaftaranVendor()) : ?>
+                <div class="col-12">
+                    <div class="card bg-danger">
+                        <div class="card-body">
+                            <p class="mb-0"><strong>Pendaftaran Belum Lengkap</strong></p>
+                            <p class="mb-0">
+                                Silahkan lengkapi data perusahaan agar dapat melakukan penawaran tender!
+                                <br>
+                                Klik <strong>Tab Data Vendor/Perusahaan</strong> untuk melengkapi data perusahaan Anda!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body box-profile">
                         <div class="text-center">
-                            <img class="profile-user-img img-fluid img-circle" src="../../dist/img/user4-128x128.jpg" alt="User profile picture">
+                            <img class="profile-user-img img-fluid img-circle" src="https://ui-avatars.com/api/?background=a0a0a0&color=fff&name=<?= $_SESSION['nama'] ?>&format=svg&bold=true" alt="User profile picture">
                         </div>
                         <h3 class="profile-username text-center"><?= $_SESSION['nama'] ?></h3>
                         <p class="text-muted text-center">
@@ -86,7 +152,7 @@ if (isset($_POST['profil'])) {
                             } elseif ($_SESSION['jenis_user'] == 2) {
                                 echo 'Petugas LPSE';
                             } elseif ($_SESSION['jenis_user'] == 3) {
-                                echo 'Perusahaan Rekanan';
+                                echo $vendor && $vendor->nama ?: 'Perusahaan Rekanan';
                             }
                             ?>
                         </p>
@@ -103,7 +169,7 @@ if (isset($_POST['profil'])) {
                             </li>
                             <?php if ($_SESSION['jenis_user'] == 3) : ?>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#vendor" data-toggle="tab">Data Vendor</a>
+                                    <a class="nav-link" href="#vendor" data-toggle="tab">Data Vendor / Perusahaan</a>
                                 </li>
                             <?php endif ?>
                         </ul>
@@ -175,56 +241,71 @@ if (isset($_POST['profil'])) {
                                     <form action="" class="form" method="post" enctype="multipart/form-data">
                                         <div class="form-group">
                                             <label class="form-label">Nama Perusahaan</label>
-                                            <input type="text" class="form-control" name="nama_perusahaan" id="nama_perusahaan" value="<?= isset($_POST['nama_perusahaan']) ? $_POST['nama_perusahaan'] : '' ?>" placeholder="Nama Perusahaan" required>
+                                            <input type="text" class="form-control" name="nama_perusahaan" id="nama_perusahaan" value="<?= ($vendor && $vendor->nama) ? $vendor->nama : '' ?>" placeholder="Nama Perusahaan" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="form-label">Alamat Perusahaan</label>
-                                            <input type="text" class="form-control" name="alamat_perusahaan" id="alamat_perusahaan" value="<?= isset($_POST['alamat_perusahaan']) ? $_POST['alamat_perusahaan'] : '' ?>" placeholder="Alamat Perusahaan" required>
+                                            <input type="text" class="form-control" name="alamat_perusahaan" id="alamat_perusahaan" value="<?= ($vendor && $vendor->alamat) ? $vendor->alamat : '' ?>" placeholder="Alamat Perusahaan" required>
                                         </div>
 
                                         <div class="form-group row">
                                             <div class="col-md-4">
                                                 <label class="form-label">Nama Pemilik</label>
-                                                <input type="text" class="form-control" name="nama_pemilik" id="nama_pemilik" value="<?= isset($_POST['nama_pemilik']) ? $_POST['nama_pemilik'] : '' ?>" placeholder="Nama Pemilik" required>
+                                                <input type="text" class="form-control" name="nama_pemilik" id="nama_pemilik" value="<?= ($vendor && $vendor->nama_pemilik) ? $vendor->nama_pemilik : '' ?>" placeholder="Nama Pemilik" required>
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label">NIK Pemilik</label>
-                                                <input type="number" class="form-control" name="nik_pemilik" id="nik_pemilik" value="<?= isset($_POST['nik_pemilik']) ? $_POST['nik_pemilik'] : '' ?>" placeholder="NIK Pemilik" minlength="16" maxlength="16" required>
+                                                <input type="text" class="form-control" name="nik_pemilik" id="nik_pemilik" value="<?= ($vendor && $vendor->nik_pemilik) ? $vendor->nik_pemilik : '' ?>" placeholder="NIK Pemilik" data-inputmask='"mask": "9999999999999999"' data-mask minlength="16" maxlength="16" inputmode="numeric" required>
                                             </div>
                                             <div class="col-md-4">
-                                                <label class="form-label">Upload KTP Pemilik</label>
-                                                <input type="file" class="form-control" name="file_ktp" id="file_ktp" value="" placeholder="Upload KTP" required accept="image/*">
+                                                <?php if ($vendor && $vendor->file_ktp_path) : ?>
+                                                    <label class="form-label">Dokumen KTP</label>
+                                                    <p class="pt-2"><a href="<?= base_url($vendor->file_ktp_path) ?>" target="_blank"><i class="fas fa-link mr-2"></i>Lihat dokumen</a></p>
+                                                <?php else : ?>
+                                                    <label class="form-label">Upload KTP Pemilik</label>
+                                                    <input type="file" class="form-control" name="file_ktp" id="file_ktp" value="" placeholder="Upload KTP" required accept="image/*">
+                                                <?php endif; ?>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <div class="col-md-4">
                                                 <label class="form-label">NPWP</label>
-                                                <input type="text" class="form-control" name="npwp" id="npwp" value="<?= isset($_POST['npwp']) ? $_POST['npwp'] : '' ?>" placeholder="NPWP" required>
+                                                <input type="text" class="form-control" name="npwp" id="npwp" value="<?= ($vendor && $vendor->npwp) ? $vendor->npwp : '' ?>" placeholder="NPWP" data-inputmask='"mask": "99.999.999.9-999.999"' data-mask required>
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label">Nama di NPWP</label>
-                                                <input type="text" class="form-control" name="nama_npwp" id="nama_npwp" value="<?= isset($_POST['nama_npwp']) ? $_POST['nama_npwp'] : '' ?>" placeholder="Nama di NPWP" required>
+                                                <input type="text" class="form-control" name="nama_npwp" id="nama_npwp" value="<?= ($vendor && $vendor->nama_npwp) ? $vendor->nama_npwp : '' ?>" placeholder="Nama di NPWP" required>
                                             </div>
                                             <div class="col-md-4">
-                                                <label class="form-label">Upload NPWP</label>
-                                                <input type="file" class="form-control" name="file_npwp" id="file_npwp" value="" placeholder="Upload NPWP" required accept="image/*">
+                                                <?php if ($vendor && $vendor->file_npwp_path) : ?>
+                                                    <label class="form-label">Dokumen NPWP</label>
+                                                    <p class="pt-2"><a href="<?= base_url($vendor->file_npwp_path) ?>" target="_blank"><i class="fas fa-link mr-2"></i>Lihat dokumen</a></p>
+                                                <?php else : ?>
+                                                    <label class="form-label">Upload NPWP</label>
+                                                    <input type="file" class="form-control" name="file_npwp" id="file_npwp" value="" placeholder="Upload NPWP" required accept="image/*">
+                                                <?php endif; ?>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <div class="col-md-4">
                                                 <label class="form-label">NIB</label>
-                                                <input type="text" class="form-control" name="nib" id="nib" value="<?= isset($_POST['nib']) ? $_POST['nib'] : '' ?>" placeholder="NIB" required>
+                                                <input type="text" class="form-control" name="nib" id="nib" value="<?= ($vendor && $vendor->no_nib) ? $vendor->no_nib : '' ?>" placeholder="NIB" data-inputmask='"mask": "***************"' data-mask required>
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label">SIUP</label>
-                                                <input type="text" class="form-control" name="siup" id="siup" value="<?= isset($_POST['siup']) ? $_POST['siup'] : '' ?>" placeholder="SIUP" required>
+                                                <input type="text" class="form-control" name="siup" id="siup" value="<?= ($vendor && $vendor->no_siup) ? $vendor->no_siup : '' ?>" placeholder="SIUP" data-inputmask='"mask": "***************"' data-mask required>
                                             </div>
                                             <div class="col-md-4">
-                                                <label class="form-label">Upload SIUP</label>
-                                                <input type="file" class="form-control" name="file_siup" id="file_siup" value="" placeholder="Upload SIUP" required accept="image/*, application/pdf">
+                                                <?php if ($vendor && $vendor->file_siup_path) : ?>
+                                                    <label class="form-label">Dokumen SIUP</label>
+                                                    <p class="pt-2"><a href="<?= base_url($vendor->file_siup_path) ?>" target="_blank"><i class="fas fa-link mr-2"></i>Lihat dokumen</a></p>
+                                                <?php else : ?>
+                                                    <label class="form-label">Upload SIUP</label>
+                                                    <input type="file" class="form-control" name="file_siup" id="file_siup" value="" placeholder="Upload SIUP" required accept="image/*, application/pdf">
+                                                <?php endif; ?>
                                             </div>
                                         </div>
 
@@ -245,9 +326,12 @@ if (isset($_POST['profil'])) {
 </section>
 <script>
     $(function() {
+        $('[data-mask]').inputmask()
+
         $("#divpass").hide();
 
         $("#togglepass").click(function() {
+
             if ($(this).is(":checked")) {
                 $("#divpass").show(300);
 
