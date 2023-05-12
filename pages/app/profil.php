@@ -129,9 +129,9 @@ if (isset($_POST['vendor'])) {
                         <div class="card-body">
                             <p class="mb-0"><strong>Pendaftaran Belum Lengkap</strong></p>
                             <p class="mb-0">
-                                Silahkan lengkapi data perusahaan agar dapat melakukan penawaran tender!
+                                Akun anda belum disetujui untuk menjadi rekanan. Silahkan lengkapi data dan dokumen persyaratan terlebih dahulu untuk memudahkan proses verifikasi.
                                 <br>
-                                Klik <strong>Tab Data Vendor/Perusahaan</strong> untuk melengkapi data perusahaan Anda!
+                                Klik <strong>Tab Data Rekanan</strong> untuk melengkapi data perusahaan Anda!
                             </p>
                         </div>
                     </div>
@@ -169,7 +169,7 @@ if (isset($_POST['vendor'])) {
                             </li>
                             <?php if ($_SESSION['jenis_user'] == 3) : ?>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#vendor" data-toggle="tab">Data Vendor / Perusahaan</a>
+                                    <a class="nav-link" href="#vendor" data-toggle="tab">Data Rekanan</a>
                                 </li>
                             <?php endif ?>
                         </ul>

@@ -47,6 +47,7 @@ $tender = $tenderSql->fetchAll();
 </section>
 
 <section class="content">
+    <?= $flash->display() ?>
     <div class="card">
         <form action="" class="form" method="post">
             <div class="card-body">
@@ -95,7 +96,7 @@ $tender = $tenderSql->fetchAll();
             <table class="table table-striped" id="tender">
                 <thead>
                     <tr>
-                        <th style="width: 10%;">ID Tender</th>
+                        <th style="width: 5%;">No.</th>
                         <th>Judul</th>
                         <th>Satker</th>
                         <th style="width: 15%;">HPS</th>
@@ -103,12 +104,14 @@ $tender = $tenderSql->fetchAll();
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($tender as $t) : ?>
+                    <?php
+                    $no = 1;
+                    foreach ($tender as $t) :
+                        if (($t['id_satker'] != $_SESSION['id_satker']) && $_SESSION['jenis_user'] == 2) continue;
+                    ?>
                         <tr>
                             <td class="align-middle">
-                                <a href="<?= base_url('app/tender/detail/' . $t['id_tender']) ?>">
-                                    <?= $t['id_tender'] ?>
-                                </a>
+                                <?= $no++ ?>
                             </td>
                             <td class="align-middle">
                                 <?php
@@ -137,7 +140,8 @@ $tender = $tenderSql->fetchAll();
                                 }
 
                                 // judul
-                                echo '<p>' . $t['judul'] . '</p>';
+
+                                echo '<p><a href="' . base_url('app/tender/detail/' . md5($t['id_tender'])) . '">' . $t['judul'] . '</a></p>';
                                 ?>
                             </td>
                             <td class="align-middle">
@@ -168,7 +172,7 @@ $tender = $tenderSql->fetchAll();
                 sSearch: '',
                 lengthMenu: '_MENU_'
             },
-            order: [0, 'desc'],
+            order: [],
             columnDefs: [{
                 targets: [0],
                 className: "text-center",

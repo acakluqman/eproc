@@ -14,7 +14,12 @@ if (isset($_POST['email'])) {
             $_SESSION['nama'] = $user->nama;
             $_SESSION['email'] = $user->email;
             $_SESSION['jenis_user'] = $user->jenis_user;
-            $_SESSION['id_vendor'] = $user->id_vendor;
+            if ($user->jenis_user == 2) {
+                $_SESSION['id_satker'] = $user->id_satker;
+            }
+            if ($user->jenis_user == 3) {
+                $_SESSION['id_vendor'] = $user->id_vendor;
+            }
 
             header("Location: " . base_url('app/dashboard'));
         } else {

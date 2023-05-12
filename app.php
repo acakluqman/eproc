@@ -24,6 +24,8 @@ if (!cekStatusPendaftaranVendor() && $_GET['page'] != 'profil') {
     <link rel="stylesheet" href="<?= base_url('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('dist/css/adminlte.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('plugins/summernote/summernote-bs4.min.css') ?>">
+
     <link rel="stylesheet" href="<?= base_url('plugins/select2/css/select2.min.css') ?>">
     <link rel="shortcut icon" href="<?= base_url('favicon.ico') ?>" type="image/x-icon">
 
@@ -117,7 +119,7 @@ if (!cekStatusPendaftaranVendor() && $_GET['page'] != 'profil') {
                         </li>
 
                         <li class="nav-item">
-                            <a href="<?= base_url('app/tender') ?>" class="nav-link <?= in_array($_GET['page'], ['tender', 'tender_detail']) ? 'active' : '' ?>">
+                            <a href="<?= base_url('app/tender') ?>" class="nav-link <?= in_array($_GET['page'], ['tender', 'tender_tambah', 'tender_detail']) ? 'active' : '' ?>">
                                 <i class="nav-icon fas fa-gavel"></i>
                                 <p>DATA TENDER</p>
                             </a>
@@ -207,6 +209,8 @@ if (!cekStatusPendaftaranVendor() && $_GET['page'] != 'profil') {
 
     <script src="<?= base_url('dist/js/adminlte.min.js') ?>"></script>
     <script src="<?= base_url('plugins/inputmask/jquery.inputmask.min.js') ?>"></script>
+    <script src="<?= base_url('plugins/summernote/summernote-bs4.min.js') ?>"></script>
+
 
     <script>
         $(function() {

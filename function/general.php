@@ -61,6 +61,8 @@ function cekStatusPendaftaranVendor()
         if (!empty($vendor->nama) && !empty($vendor->alamat) && !empty($vendor->nama_pemilik) && !empty($vendor->nik_pemilik) && !empty($vendor->nama_pemilik) && !empty($vendor->nik_pemilik) && !empty($vendor->file_ktp_path) && !empty($vendor->npwp) && !empty($vendor->nama_npwp) && !empty($vendor->file_npwp_path) && !empty($vendor->no_siup) && !empty($vendor->file_siup_path) && !empty($vendor->no_nib)) {
             $result = true;
         }
+    } else {
+        return true;
     }
 
     return $result;
