@@ -41,7 +41,7 @@ require_once('./config.php');
                         <li class="nav-item <?= !isset($_GET['page']) ? 'active' : '' ?>">
                             <a href="<?= base_url() ?>" class="nav-link">Beranda</a>
                         </li>
-                        <li class="nav-item <?= in_array($_GET['page'], ['tender', 'tender_detail']) ? 'active' : '' ?>">
+                        <li class="nav-item <?= isset($_GET['page']) && in_array($_GET['page'], ['tender', 'tender_detail']) ? 'active' : '' ?>">
                             <a href="<?= base_url('tender') ?>" class="nav-link">Tender</a>
                         </li>
                         <?php if (isset($_SESSION['is_login'])) : ?>

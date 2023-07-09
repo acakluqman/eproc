@@ -72,42 +72,36 @@ $tender = $tenderSql->fetchAll();
                     <div class="card-body table-responsive">
                         <table class="table table-striped" id="tender">
                             <thead>
-                            <tr>
-                                <th class="text-center">ID</th>
-                                <th>Judul Tender</th>
-                                <th>Satuan Kerja</th>
-                                <th>HPS</th>
-                            </tr>
+                                <tr>
+                                    <th>Judul Tender</th>
+                                    <th>Satuan Kerja</th>
+                                    <th>HPS</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($tender as $t): ?>
-                                <tr>
-                                    <td class="text-center align-middle">
-                                        <a href="<?= base_url('tender/detail/' . $t['id_tender']) ?>">
-                                            <?= $t['id_tender'] ?>
-                                        </a>
-                                    </td>
-                                    <td class="align-middle">
-                                        <?php
-                                        // jenis tender
-                                        if ($t['id_jenis'] == 1) {
-                                            echo '<span class="badge bg-purple">' . $t['jenis'] . '</span> ';
-                                        }
-                                        if ($t['id_jenis'] == 2) {
-                                            echo '<span class="badge bg-teal">' . $t['jenis'] . '</span> ';
-                                        }
-                                        ?>
+                                <?php foreach ($tender as $t) : ?>
+                                    <tr>
+                                        <td class="align-middle">
+                                            <?php
+                                            // jenis tender
+                                            if ($t['id_jenis'] == 1) {
+                                                echo '<span class="badge bg-purple">' . $t['jenis'] . '</span> ';
+                                            }
+                                            if ($t['id_jenis'] == 2) {
+                                                echo '<span class="badge bg-teal">' . $t['jenis'] . '</span> ';
+                                            }
+                                            ?>
 
-                                        <p class="pt-0 pb-0"><?= $t['judul'] ?></p>
-                                    </td>
-                                    <td class="align-middle">
-                                        <?= $t['satker'] ?>
-                                    </td>
-                                    <td class="align-middle">
-                                        <?= rupiah($t['nilai_hps']) ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach ?>
+                                            <p class="pt-0 pb-0"> <a href="<?= base_url('tender/detail/' . $t['id_tender']) ?>"><?= $t['judul'] ?></a></p>
+                                        </td>
+                                        <td class="align-middle">
+                                            <?= $t['satker'] ?>
+                                        </td>
+                                        <td class="align-middle">
+                                            <?= rupiah($t['nilai_hps']) ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach ?>
                             </tbody>
                         </table>
                     </div>
@@ -120,7 +114,7 @@ $tender = $tenderSql->fetchAll();
 <script>
     let tender;
 
-    $(function () {
+    $(function() {
         tender = $('#tender').DataTable({
             language: {
                 processing: 'Loading...',

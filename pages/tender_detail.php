@@ -67,13 +67,15 @@ $peserta = $pesertaSql->fetchAll();
                             <div class="active tab-pane" id="detail">
                                 <table class="table table-striped table-sm">
                                     <tr>
-                                        <td style="width: 15%;">
-                                            <strong>Kode Tender</strong>
+                                        <td>
+                                            <strong>Jenis Pengadaan</strong>
                                         </td>
-                                        <td colspan="3"><?= $detail['id_tender'] ?></td>
+                                        <td colspan="3">
+                                            <?= $detail['jenis_tender'] ?>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td style="width: 20%;">
                                             <strong>Judul Tender</strong>
                                         </td>
                                         <td colspan="3">
@@ -82,10 +84,10 @@ $peserta = $pesertaSql->fetchAll();
                                     </tr>
                                     <tr>
                                         <td>
-                                            <strong>Tanggal Pembuatan</strong>
+                                            <strong>Tanggal Akhir Pendaftaran</strong>
                                         </td>
                                         <td colspan="3">
-                                            <?= tanggal($detail['tgl_buat']) ?>
+                                            <?= tanggal(date_format(date_create($detail['tgl_akhir_daftar']), 'Y-m-d')) ?>
                                         </td>
                                     </tr>
                                     <tr>
@@ -102,14 +104,6 @@ $peserta = $pesertaSql->fetchAll();
                                         </td>
                                         <td colspan="3">
                                             <?= $detail['nama_satker'] ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <strong>Jenis Pengadaan</strong>
-                                        </td>
-                                        <td colspan="3">
-                                            <?= $detail['jenis_tender'] ?>
                                         </td>
                                     </tr>
                                     <tr>
@@ -131,7 +125,7 @@ $peserta = $pesertaSql->fetchAll();
                                             <strong>Syarat Kualifikasi</strong>
                                         </td>
                                         <td colspan="3">
-                                            <!-- TODO: syarat kualifikasi -->
+                                            <?= ($detail['kualifikasi']) ? $detail['kualifikasi'] : '-' ?>
                                         </td>
                                     </tr>
                                     <tr>
@@ -139,7 +133,7 @@ $peserta = $pesertaSql->fetchAll();
                                             <strong>Jumlah Peserta</strong>
                                         </td>
                                         <td colspan="3">
-                                            <?= sizeof($peserta) ?> Peserta
+                                            <?= (sizeof($peserta) > 0) ? sizeof($peserta) . ' Peserta' : 'Belum ada peserta' ?>
                                         </td>
                                     </tr>
                                 </table>
@@ -290,8 +284,19 @@ $peserta = $pesertaSql->fetchAll();
 
             <div class="col-12">
                 <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Ikuti Tender</h3>
+                    </div>
                     <div class="card-body">
-                        <p>lorem</p>
+                        <p>Silahkan masukkan harga penawaran Anda dan klik tombol <strong>Ikuti Tender</strong> untuk mendaftar menjadi peserta tender. Setelah terdaftar menjadi peserta, Anda diharuskan untuk upload dokumen yang diperlukan!</p>
+
+                        <form class="form" method="post" action="">
+                            <div class="form-group">
+                                <label for="harga_penawaran">Harga Penawaran</label>
+                                <input type="number" class="form-control" name="harga_penawaran" id="harga_penawaran" placeholder="Harga Penawaran">
+                            </div>
+                            <button type="submit" class="btn btn-success">Ikuti Tender</button>
+                        </form>
                     </div>
                 </div>
             </div>

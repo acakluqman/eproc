@@ -9,11 +9,12 @@ RewriteRule ^auth/forgot$ ./auth.php?page=forgot
 RewriteRule ^auth/reset/([a-zA-Z0-9]*)$ ./auth.php?page=reset&token=$1
 
 RewriteRule ^tender$ ./index.php?page=tender
-RewriteRule ^tender/detail/([0-9]*)$ ./index.php?page=tender_detail&id_tender=$1
-# RewriteRule ^penawaran$ ./index.php?page=penawaran
+RewriteRule ^tender/detail/([a-zA-Z0-9]*)$ ./index.php?page=tender_detail&id_tender=$1
 # RewriteRule ^profil$ ./index.php?page=profil
 
 RewriteRule ^app/dashboard$ ./app.php?page=dashboard
+
+RewriteRule ^app/penawaran$ ./app.php?page=penawaran
 
 RewriteRule ^app/satker$ ./app.php?page=satker
 

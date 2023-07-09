@@ -45,7 +45,6 @@ $admin = $sqlAdmin->fetchAll();
                             <th>NPWP</th>
                         <?php } ?>
                         <th>Tanggal Bergabung</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,14 +61,6 @@ $admin = $sqlAdmin->fetchAll();
                                 <td><?= $user['npwp'] ?></td>
                             <?php } ?>
                             <td><?= tanggal($user['tgl_daftar']) ?></td>
-                            <td>
-                                <a href="<?= base_url('app/user/edit/' . md5($user['id_user'])) ?>" class="btn btn-xs btn-success" title="Edit">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </a>
-                                <a href="<?= base_url('app/user/hapus/' . md5($user['id_user'])) ?>" class="btn btn-xs btn-danger" title="Hapus">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
-                            </td>
                         </tr>
                     <?php } ?>
                 </tbody>

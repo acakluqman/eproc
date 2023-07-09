@@ -64,18 +64,20 @@ $tender = $tenderSql->fetchAll();
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="status">Status</label>
-                            <select class="form-control" name="id_status" id="id_status">
-                                <option value="">Semua Status</option>
-                                <?php foreach ($status as $st) : ?>
-                                    <option value="<?= $st['id_status'] ?>" <?= (isset($_POST['id_status']) && $_POST['id_status'] == $st['id_status']) ? 'selected' : '' ?>>
-                                        <?= $st['nama'] ?></option>
-                                <?php endforeach ?>
-                            </select>
+                    <?php if ($_SESSION['jenis_user'] != 3) { ?>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select class="form-control" name="id_status" id="id_status">
+                                    <option value="">Semua Status</option>
+                                    <?php foreach ($status as $st) : ?>
+                                        <option value="<?= $st['id_status'] ?>" <?= (isset($_POST['id_status']) && $_POST['id_status'] == $st['id_status']) ? 'selected' : '' ?>>
+                                            <?= $st['nama'] ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                    <?php } ?>
                 </div>
             </div>
             <div class="card-footer">
@@ -86,11 +88,13 @@ $tender = $tenderSql->fetchAll();
     </div>
 
     <div class="card">
-        <div class="card-header">
-            <a href="<?= base_url('app/tender/tambah') ?>" class="btn btn-primary">
-                <i class="fas fa-plus-circle mr-2"></i> Tambah Tender
-            </a>
-        </div>
+        <?php if ($_SESSION['jenis_user'] == 2) { ?>
+            <div class="card-header">
+                <a href="<?= base_url('app/tender/tambah') ?>" class="btn btn-primary">
+                    <i class="fas fa-plus-circle mr-2"></i> Tambah Tender
+                </a>
+            </div>
+        <?php } ?>
 
         <div class="card-body table-responsive">
             <table class="table table-striped" id="tender">
@@ -100,14 +104,22 @@ $tender = $tenderSql->fetchAll();
                         <th>Judul</th>
                         <th>Satker</th>
                         <th style="width: 15%;">HPS</th>
-                        <th></th>
+                        <?php if ($_SESSION['jenis_user'] != 3) { ?>
+                            <th></th>
+                        <?php } ?>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     $no = 1;
                     foreach ($tender as $t) :
-                        if (($t['id_satker'] != $_SESSION['id_satker']) && $_SESSION['jenis_user'] == 2) continue;
+                        if (isset($_SESSION['id_satker'])) {
+                            if (($t['id_satker'] != $_SESSION['id_satker']) && $_SESSION['jenis_user'] == 2) continue;
+                        }
+
+                        if ($_SESSION['jenis_user'] == 3 && $t['id_status'] != 2) {
+                            continue;
+                        }
                     ?>
                         <tr>
                             <td class="align-middle">
@@ -124,23 +136,24 @@ $tender = $tenderSql->fetchAll();
                                 }
 
                                 // status tender
-                                if ($t['id_status'] == 1) {
-                                    echo '<span class="badge badge-warning">' . $t['status'] . '</span> ';
-                                }
-                                if ($t['id_status'] == 2) {
-                                    echo '<span class="badge badge-success">' . $t['status'] . '</span> ';
-                                }
-                                if ($t['id_status'] == 3) {
-                                    echo '<span class="badge badge-danger">' . $t['status'] . '</span> ';
+                                if ($_SESSION['jenis_user'] != 3) {
+                                    if ($t['id_status'] == 1) {
+                                        echo '<span class="badge badge-warning">' . $t['status'] . '</span> ';
+                                    }
+                                    if ($t['id_status'] == 2) {
+                                        echo '<span class="badge badge-success">' . $t['status'] . '</span> ';
+                                    }
+                                    if ($t['id_status'] == 3) {
+                                        echo '<span class="badge badge-danger">' . $t['status'] . '</span> ';
+                                    }
                                 }
 
                                 // jumlah peserta
                                 if ($t['id_status'] == 2) {
-                                    echo '<span class="badge badge-info">' . $t['jml_peserta'] . ' Peserta</span> ';
+                                    echo '<span class="badge badge-info">' . (int) $t['jml_peserta'] . ' Peserta</span> ';
                                 }
 
                                 // judul
-
                                 echo '<p><a href="' . base_url('app/tender/detail/' . md5($t['id_tender'])) . '">' . $t['judul'] . '</a></p>';
                                 ?>
                             </td>
@@ -150,9 +163,11 @@ $tender = $tenderSql->fetchAll();
                             <td class="align-middle">
                                 <?= rupiah($t['nilai_hps']) ?>
                             </td>
-                            <td class="align-middle">
-                                <button title="Hapus" class="btn btn-xs btn-danger"><i class="fas fa-trash-alt"></i></button>
-                            </td>
+                            <?php if ($_SESSION['jenis_user'] != 3) { ?>
+                                <td class="align-middle">
+                                    <button title="Hapus" class="btn btn-xs btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            <?php } ?>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

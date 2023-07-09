@@ -125,6 +125,15 @@ if (!cekStatusPendaftaranVendor() && $_GET['page'] != 'profil') {
                             </a>
                         </li>
 
+                        <?php if ($_SESSION['jenis_user'] == 3) : ?>
+                            <li class="nav-item">
+                                <a href="<?= base_url('app/penawaran') ?>" class="nav-link <?= in_array($_GET['page'], ['penawaran']) ? 'active' : '' ?>">
+                                    <i class="nav-icon fas fa-handshake"></i>
+                                    <p>PENAWARAN SAYA</p>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+
                         <?php if ($_SESSION['jenis_user'] == 1) : ?>
                             <li class="nav-item <?= (isset($_GET['page']) && in_array($_GET['page'], ['satker'])) ? 'menu-open' : '' ?>">
                                 <a href="#" class="nav-link <?= (isset($_GET['page']) && in_array($_GET['page'], ['satker'])) ? 'active' : '' ?>">

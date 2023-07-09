@@ -9,12 +9,16 @@ $user = $sqlUser->fetch();
         <div class="row mb-2">
             <div class="col-sm-6">
                 <?php
-                if ($_GET['id_jenis'] == 1) {
-                    echo '<h1>Edit Data Administrator</h1>';
-                } elseif ($_GET['id_jenis'] == 2) {
-                    echo '<h1>Edit Data Petugas LPSE</h1>';
-                } elseif ($_GET['id_jenis'] == 3) {
-                    echo '<h1>Edit Data Vendor Perusahaan</h1>';
+                if (isset($_GET['id_jenis'])) {
+                    if ($_GET['id_jenis'] == 1) {
+                        echo '<h1>Edit Data Administrator</h1>';
+                    } elseif ($_GET['id_jenis'] == 2) {
+                        echo '<h1>Edit Data Petugas LPSE</h1>';
+                    } elseif ($_GET['id_jenis'] == 3) {
+                        echo '<h1>Edit Data Vendor Perusahaan</h1>';
+                    }
+                } else {
+                    echo '<h1>Edit User</h1>';
                 }
                 ?>
             </div>
@@ -26,9 +30,12 @@ $user = $sqlUser->fetch();
     <?= $flash->display() ?>
     <div class="card">
         <div class="card-body">
-            <?php
-            var_dump($user);
-            ?>
+            <div class="form-group">
+                <label for="nama" class="col-md-3 control-label">Nama</label>
+                <div class="col-md-5">
+                    <input class="form-control" type="text" name="nama" id="nama" value="" placeholder="Nama" required>
+                </div>
+            </div>
         </div>
     </div>
 </section>

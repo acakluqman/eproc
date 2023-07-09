@@ -5,13 +5,19 @@ function base_url($path = null)
     return (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . $path;
 }
 
-function tanggal($tanggal)
+function tanggal($tgl)
 {
+    $tanggal = explode(" ", $tgl);
+
     $bulan = array(
         1 => 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
     );
 
-    return date('d', strtotime($tanggal)) . ' ' . $bulan[(int)date('m', strtotime($tanggal))] . ' ' . date('Y', strtotime($tanggal));
+    $resTanggal = date('d', strtotime($tanggal[0])) . ' ' . $bulan[(int)date('m', strtotime($tanggal[0]))] . ' ' . date('Y', strtotime($tanggal[0]));
+    $resJam =  (isset($tanggal[1])) ? $tanggal[1] : '';
+    $resA =  (isset($tanggal[2])) ? $tanggal[2] : '';
+
+    return $resTanggal . ' ' . $resJam . ' ' . $resA;
 }
 
 function rupiah($angka)
