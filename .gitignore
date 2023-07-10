@@ -6,3 +6,4 @@ error_log
 html
 html/*
 config.php
+upload/*

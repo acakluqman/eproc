@@ -360,15 +360,108 @@ if (isset($_POST['tolak'])) {
         </div>
     <?php } ?>
 
-    <?php if ($_SESSION['jenis_user'] == 3) { ?>
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title">Unggah Dokumen</h5>
+    <?php
+    if ($_SESSION['jenis_user'] == 3) {
+        $isDaftarSql = $conn->prepare("SELECT id_tender FROM tender_peserta WHERE id_vendor = :id_vendor AND md5(id_tender) = :id_tender");
+        $isDaftarSql->execute(['id_vendor' => $_SESSION['id_vendor'], 'id_tender' => $id_tender]);
+        $isDaftar = $isDaftarSql->fetchObject();
+
+        $dokumenSql = $conn->prepare("SELECT
+                td.*,
+                jd.jns_dok,
+                jd.ekstensi,
+                tdp.id_dok_peserta,
+                tdp.filepath,
+                tdp.tgl_unggah
+            FROM
+                tender_dokumen td
+            LEFT JOIN jenis_dok jd ON
+                jd.id_jns_dok = td.id_jenis_dok
+            LEFT JOIN tender_dok_peserta tdp ON
+                tdp.id_tender_dokumen = td.id_tender_dokumen
+            WHERE
+                md5(td.id_tender) = :id_tender
+                AND tdp.id_vendor = :id_vendor");
+        $dokumenSql->execute(['id_tender' => $id_tender, 'id_vendor' => $_SESSION['id_vendor']]);
+        $dokumen = $dokumenSql->fetchAll();
+
+        if ($isDaftar) { ?>
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Unggah Dokumen</h5>
+                </div>
+                <div class="card-body">
+                    <?php
+                    if (isset($_POST['upload'])) {
+                        $conn->beginTransaction();
+                        try {
+                            foreach ($_FILES['file']['tmp_name'] as $key => $tmp_name) {
+                                $file_name = $key . $_FILES['file']['name'][$key];
+                                $file_size = $_FILES['file']['size'][$key];
+                                $file_tmp = $_FILES['file']['tmp_name'][$key];
+                                $file_type = $_FILES['file']['type'][$key];
+
+                                $filepath = "upload/" . time() . $file_name;
+
+                                if (move_uploaded_file($file_tmp, $filepath)) {
+                                    $updateDokSql = $conn->prepare("UPDATE tender_dok_peserta SET filepath = :filepath, tgl_unggah = :tgl_unggah WHERE id_vendor = :id_vendor AND id_tender_dokumen = :id_tender_dokumen");
+                                    $updateDokSql->execute(['filepath' => $filepath, 'tgl_unggah' => date('Y-m-d H:i:s'), 'id_vendor' => $_SESSION['id_vendor'], 'id_tender_dokumen' => $_POST['id_tender_dokumen'][$key]]);
+                                }
+                            }
+
+                            $conn->commit();
+                            $flash->success('Berhasil unggah dokumen!');
+                        } catch (PDOExecption $e) {
+                            $flash->error('Gagal mengunggah dokumen!' . $e->getMessage());
+                            $conn->rollBack();
+                        }
+                        header('Location: ' . base_url('app/tender/detail/' . $id_tender));
+                    }
+                    ?>
+                    <form method="post" action="" enctype="multipart/form-data">
+                        <?php
+                        $up = 0;
+                        foreach ($dokumen as $key => $dok) {
+                            if ($dok['filepath'] != '') { ?>
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="upload_<?= $dok['id_tender_dokumen'] ?>"><?= $dok['jns_dok'] ?></label>
+                                            <p><a href="<?= base_url($dok['filepath']) ?>" target="_blank">Lihat Dokumen</a></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-xs btn-danger">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            <?php } else { ?>
+                                <?php $up++ ?>
+                                <div class="form-group">
+                                    <label for="upload_<?= $dok['id_tender_dokumen'] ?>"><?= $dok['jns_dok'] ?></label>
+                                    <div class="col-md-5">
+                                        <input type="hidden" name="id_tender_dokumen[]" value="<?= $dok['id_tender_dokumen'] ?>">
+                                        <input type="file" name="file[]" id="upload_<?= $dok['id_tender_dokumen'] ?>" required>
+                                    </div>
+                                </div>
+                            <?php
+                            }
+                        }
+
+                        if ($up > 0) { ?>
+                            <div class="form-group">
+                                <button type="submit" name="upload" class="btn btn-primary">Unggah</button>
+                            </div>
+                        <?php }
+                        ?>
+                    </form>
+                </div>
             </div>
-            <div class="card-body">
-            </div>
-        </div>
-    <?php } ?>
+    <?php
+        }
+    }
+    ?>
 </section>
 
 <script>

@@ -101,9 +101,6 @@ require_once('./config.php');
             if (isset($_GET['page']) && file_exists('./pages/' . $_GET['page'] . '.php')) {
                 require_once('./pages/' . $_GET['page'] . '.php');
             } else {
-                echo '<pre>';
-                var_dump($_SESSION);
-                echo '</pre>';
             }
             ?>
         </div>
