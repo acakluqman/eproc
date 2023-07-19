@@ -65,14 +65,14 @@ if (isset($_POST['nama'])) {
                 <div class="form-group row">
                     <label for="nama" class="col-sm-2 col-form-label">Nama Pengguna</label>
                     <div class="col-md-6">
-                        <input type="text" class="form-control" name="nama" id="nama" value="<?= $_POST['nama'] ?: '' ?>" placeholder="Nama Pengguna" required>
+                        <input type="text" class="form-control" name="nama" id="nama" value="<?= $_POST['nama'] ?? '' ?>" placeholder="Nama Pengguna" required>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="email" class="col-sm-2 col-form-label">Alamat Email</label>
                     <div class="col-md-6">
-                        <input type="email" class="form-control" name="email" id="email" value="<?= $_POST['email'] ?: '' ?>" placeholder="Alamat Email" inputmode="email" required>
+                        <input type="email" class="form-control" name="email" id="email" value="<?= $_POST['email'] ?? '' ?>" placeholder="Alamat Email" inputmode="email" required>
                     </div>
                 </div>
 

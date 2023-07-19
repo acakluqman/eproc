@@ -26,6 +26,7 @@ if (isset($_POST['tambah'])) {
         $tgl_setuju = $id_user_setuju = $catatan_persetujuan = $keterangan = $kualifikasi = null;
         $tgl_buat = date('Y-m-d');
         $jadwal = $_POST['jadwal'];
+        $dokumen = $_POST['dokumen'];
 
         $sqlTambahTender = $conn->prepare("INSERT INTO tender (id_tender, judul, deskripsi, id_satker, nilai_pagu, nilai_hps, id_jenis, tgl_akhir_daftar, id_status, tgl_setuju, id_user_setuju, catatan_persetujuan, keterangan, kualifikasi, tgl_buat) VALUES (:id_tender, :judul, :deskripsi, :id_satker, :nilai_pagu, :nilai_hps, :id_jenis, :tgl_akhir_daftar, :id_status, :tgl_setuju, :id_user_setuju, :catatan_persetujuan, :keterangan, :kualifikasi, :tgl_buat)");
         $tambahTender = $sqlTambahTender->execute([
@@ -53,6 +54,14 @@ if (isset($_POST['tambah'])) {
                 'nama_kegiatan' => escape($j['nama']),
                 'tgl_mulai' => escape(date_format(date_create($j['mulai']), 'Y-m-d H:i:s')),
                 'tgl_selesai' => $j['akhir'] ? escape(date_format(date_create($j['akhir']), 'Y-m-d H:i:s')) : null
+            ]);
+        }
+
+        foreach ($dokumen as $dok) {
+            $sqlTambahDokumen = $conn->prepare("INSERT INTO tender_dokumen (id_tender, id_jenis_dok) VALUES (:id_tender, :id_jenis_dok)");
+            $tambahDokumen = $sqlTambahDokumen->execute([
+                'id_tender' => $id_tender,
+                'id_jenis_dok' => $dok,
             ]);
         }
 
@@ -157,6 +166,21 @@ if (isset($_POST['tambah'])) {
                     </div>
                 </div>
 
+                <?php
+                $dokumenSql = $conn->prepare("SELECT * FROM jenis_dok");
+                $dokumenSql->execute();
+                $dokumen = $dokumenSql->fetchAll();
+                ?>
+                <h5>Dokumen</h5>
+                <?php
+                foreach ($dokumen as $dok) { ?>
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" name="dokumen[]" id="dok_<?= $dok['id_jns_dok'] ?>" value="<?= $dok['id_jns_dok'] ?>">
+                            <label for="dok_<?= $dok['id_jns_dok'] ?>" class="custom-control-label"><?= $dok['jns_dok'] ?></label>
+                        </div>
+                    </div>
+                <?php } ?>
 
                 <div class="form-group">
                     <a href="<?= base_url('app/tender') ?>" class="btn btn-danger"><i class="fas fa-arrow-left mr-2"></i> Batal</a>

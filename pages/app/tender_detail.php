@@ -177,6 +177,22 @@ if (isset($_POST['tolak'])) {
                             </table>
                         </div>
                     </div>
+
+                    <div class="row form-group">
+                        <label class="control-label col-md-2" for="tgl_setuju">Dokumen</label>
+                        <div class="col-md-10">
+                            <ol>
+                                <?php
+                                $dokumenTenderSql = $conn->prepare("SELECT jd.* FROM tender_dokumen td LEFT JOIN jenis_dok jd ON jd.id_jns_dok = td.id_jenis_dok WHERE md5(td.id_tender) = :id_tender");
+                                $dokumenTenderSql->execute(['id_tender' => $id_tender]);
+                                $dokumenTender = $dokumenTenderSql->fetchAll();
+                                foreach ($dokumenTender as $dok) {
+                                    echo '<li>' . $dok['jns_dok'] . '</li>';
+                                }
+                                ?>
+                            </ol>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="tab-pane table-responsive" id="peserta">
@@ -390,7 +406,7 @@ if (isset($_POST['tolak'])) {
                 <div class="card-header">
                     <h5 class="card-title">Unggah Dokumen</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body" id="dokumen">
                     <?php
                     if (isset($_POST['upload'])) {
                         $conn->beginTransaction();
@@ -431,7 +447,7 @@ if (isset($_POST['tolak'])) {
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="button" class="btn btn-xs btn-danger">
+                                        <button type="button" id="delete-dokumen" data-id="<?= $dok['id_dok_peserta'] ?>" class="btn btn-xs btn-danger">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </button>
                                     </div>
@@ -468,6 +484,10 @@ if (isset($_POST['tolak'])) {
     let peserta;
 
     $(function() {
+        $('#dokumen').on('click', '#delete-dokumen', function() {
+            console.log($(this).data('id'));
+        })
+
         peserta = $('#tpeserta').DataTable({
             language: {
                 processing: 'Loading...',
