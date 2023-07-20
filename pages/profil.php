@@ -20,7 +20,7 @@ if (isset($_POST)) {
     }
 
     if (isset($_POST['vendor'])) {
-        $ktpFilename = $npwpFilename = $siupFilename = NULL;
+        $ktpFilename = $npwpFilename = $siupFilename = null;
 
         $path = 'upload' . DIRECTORY_SEPARATOR;
         if ($_FILES['file_ktp']['tmp_name']) {

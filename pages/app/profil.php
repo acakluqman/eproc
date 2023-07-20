@@ -70,43 +70,104 @@ if (isset($_POST['profil'])) {
 
 // perbarui data vendor
 if (isset($_POST['vendor'])) {
-    $id_vendor = $_SESSION['id_vendor'];
-    $nama = escape($_POST['nama_perusahaan']);
-    $alamat = escape($_POST['alamat_perusahaan']);
-    $nama_pemilik = escape($_POST['nama_pemilik']);
-    $nik_pemilik = escape($_POST['nik_pemilik']);
-    $npwp = escape($_POST['npwp']);
-    $nama_npwp = escape($_POST['nama_npwp']);
-    $nib = escape($_POST['nib']);
-    $siup = escape($_POST['siup']);
+    $conn->beginTransaction();
+    try {
+        $ktpFilename = $npwpFilename = $siupFilename = null;
 
-    if (strlen(str_replace('_', '', $nik_pemilik)) != 16) {
-        $flash->warning('Format NIK tidak valid!');
-    } elseif (strlen(str_replace('_', '', $npwp)) != 20) {
-        $flash->warning('Format NPWP tidak valid!');
-    } else {
-        $sqlUpdateVendor = $conn->prepare("UPDATE vendor SET nama = :nama, alamat = :alamat, nama_pemilik = :nama_pemilik, nik_pemilik = :nik_pemilik, npwp = :npwp, nama_npwp = :nama_npwp, no_siup = :no_siup, no_nib = :no_nib WHERE id_vendor = :id_vendor");
-        $update = $sqlUpdateVendor->execute([
-            'id_vendor' => $id_vendor,
-            'nama' => strtoupper($nama),
-            'alamat' => $alamat,
-            'nama_pemilik' => $nama_pemilik,
-            'nik_pemilik' => str_replace('_', '', $nik_pemilik),
-            'npwp' => str_replace('_', '', $npwp),
-            'nama_npwp' => $nama_npwp,
-            'no_siup' => sprintf("%015d", str_replace('_', '', $siup)),
-            'no_nib' => sprintf("%015d", str_replace('_', '', $nib)),
-        ]);
+        $path = 'upload' . DIRECTORY_SEPARATOR;
+        if ($_FILES['file_ktp']['tmp_name']) {
+            $checkKtp = getimagesize($_FILES['file_ktp']['tmp_name']);
+            $ktpFilename = $path . uniqid() . '.' . pathinfo($_FILES['file_ktp']['name'], PATHINFO_EXTENSION);
 
-        if ($update) {
-            $flash->success('Berhasil memperbarui data vendor!');
-        } else {
-            $flash->success('Gagal memperbarui data vendor. Silahkan ulangi kembali!');
+            // if (!$checkKtp) {
+            //     $flash->warning('Format file KTP yang hanya dapat diunggah adalah .jpg, .jpeg dan .png!');
+            // }
+
+            // if ($_FILES["file_ktp"]["size"] > 2097152) {
+            //     $flash->warning('Ukuran file KTP yang dapat diunggah adalah 2MB!');
+            // }
+
+            if (move_uploaded_file($_FILES["file_ktp"]["tmp_name"], $ktpFilename)) {
+                $flash->success("The file " . $ktpFilename . " has been uploaded.");
+            } else {
+                $flash->warning("Sorry, there was an error uploading your file.");
+            }
         }
-    }
 
-    header('Location:' . base_url('app/profil'));
-    exit();
+        if ($_FILES['file_npwp']['tmp_name']) {
+            $checkNpwp = getimagesize($_FILES['file_npwp']['tmp_name']);
+            $npwpFilename = $path . uniqid() . '.' . pathinfo($_FILES['file_npwp']['name'], PATHINFO_EXTENSION);
+
+            // if (!$checkNpwp) {
+            //     $flash->warning('Format file NPWP yang hanya dapat diunggah adalah .jpg, .jpeg dan .png!');
+            // }
+
+            // if ($_FILES["file_npwp"]["size"] > 2097152) {
+            //     $flash->warning('Ukuran file NPWP yang dapat diunggah adalah 2MB!');
+            // }
+
+            if (move_uploaded_file($_FILES["file_npwp"]["tmp_name"], $npwpFilename)) {
+                $flash->success("The file " . $npwpFilename . " has been uploaded.");
+            } else {
+                $flash->warning("Sorry, there was an error uploading your file.");
+            }
+        }
+
+        if ($_FILES['file_siup']['tmp_name']) {
+            $checkMimeSiup = strtolower(pathinfo('upload/' . $_FILES['file_siup']['name'], PATHINFO_EXTENSION));
+            $siupFilename = $path . uniqid() . '.' . pathinfo($_FILES['file_siup']['name'], PATHINFO_EXTENSION);
+
+            // if (!in_array($checkMimeSiup, ['png', 'jpg', 'jpeg', 'pdf'])) {
+            //     $flash->warning('Format file SIUP yang hanya dapat diunggah adalah .jpg, .jpeg, .png dan .pdf!');
+            // }
+
+            // if ($_FILES["file_siup"]["size"] > 2097152) {
+            //     $flash->warning('Ukuran file NPWP yang dapat diunggah adalah 2MB!');
+            // }
+
+            if (move_uploaded_file($_FILES["file_siup"]["tmp_name"], $siupFilename)) {
+                $flash->success("The file " . $siupFilename . " has been uploaded.");
+            } else {
+                $flash->warning("Sorry, there was an error uploading your file.");
+            }
+        }
+
+        if (strlen(str_replace('_', '', $_POST['nik_pemilik'])) != 16) {
+            $flash->warning('Format NIK tidak valid!');
+        } elseif (strlen(str_replace('_', '', $_POST['npwp'])) != 20) {
+            $flash->warning('Format NPWP tidak valid!');
+        } else {
+            $insertVendor = $conn->prepare("INSERT INTO vendor (nama, alamat, nama_pemilik, nik_pemilik, file_ktp_path, npwp, nama_npwp, file_npwp_path, no_siup, file_siup_path, no_nib) VALUES (:nama, :alamat, :nama_pemilik, :nik_pemilik, :file_ktp_path, :npwp, :nama_npwp, :file_npwp_path, :no_siup, :file_siup_path, :no_nib)");
+            $update = $insertVendor->execute([
+                'nama' => strtoupper(escape($_POST['nama_perusahaan'])),
+                'alamat' => escape($_POST['alamat_perusahaan']),
+                'nama_pemilik' => escape($_POST['nama_pemilik']),
+                'nik_pemilik' => str_replace('_', '', escape($_POST['nik_pemilik'])),
+                'file_ktp_path' => $ktpFilename,
+                'npwp' => str_replace('_', '', escape($_POST['npwp'])),
+                'nama_npwp' => escape($_POST['nama_npwp']),
+                'file_npwp_path' => $npwpFilename,
+                'no_siup' => str_replace('_', '', escape($_POST['siup'])),
+                'file_siup_path' => $siupFilename,
+                'no_nib' => str_replace('_', '', escape($_POST['nib'])),
+            ]);
+
+            $id_vendor = $conn->lastInsertId();
+
+            $user = $conn->prepare("UPDATE user SET id_vendor = :id_vendor WHERE id_user = :id_user");
+            $user->execute(['id_vendor' => $id_vendor, 'id_user' => $_SESSION['id_user']]);
+
+            $_SESSION['id_vendor'] = $id_vendor;
+        }
+
+        $conn->commit();
+        $flash->success('Berhasil memperbarui data vendor!');
+
+        header('Location:' . base_url('app/profil'));
+    } catch (PDOExecption $e) {
+        $conn->rollBack();
+        $flash->error('Gagal memperbarui data vendor! ' . $e->getMessage());
+    }
 }
 ?>
 <section class="content-header">
