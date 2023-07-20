@@ -27,9 +27,11 @@ $pesertaSql = $conn->prepare("SELECT
 $pesertaSql->execute();
 $peserta = $pesertaSql->fetchAll();
 
-$isDaftarSql = $conn->prepare("SELECT id_tender FROM tender_peserta WHERE id_vendor = :id_vendor AND id_tender = :id_tender");
-$isDaftarSql->execute(['id_vendor' => $_SESSION['id_vendor'], 'id_tender' => $detail['id_tender']]);
-$isDaftar = $isDaftarSql->fetchObject();
+if (isset($_SESSION['id_vendor'])) {
+    $isDaftarSql = $conn->prepare("SELECT id_tender FROM tender_peserta WHERE id_vendor = :id_vendor AND id_tender = :id_tender");
+    $isDaftarSql->execute(['id_vendor' => $_SESSION['id_vendor'], 'id_tender' => $detail['id_tender']]);
+    $isDaftar = $isDaftarSql->fetchObject();
+}
 
 if (isset($_POST['harga_penawaran'])) {
     $conn->beginTransaction();
@@ -325,15 +327,19 @@ if (isset($_POST['harga_penawaran'])) {
                         <?php if (!empty($isDaftar)) { ?>
                             <p>Anda telah terdaftar untuk mengikuti tender ini. Silahkan lengkapi dokumen <a href="<?= base_url('app/tender/detail/' . md5($detail['id_tender'])) ?>">di halaman ini</a>!</p>
                         <?php } else { ?>
-                            <p>Silahkan masukkan harga penawaran Anda dan klik tombol <strong>Ikuti Tender</strong> untuk mendaftar menjadi peserta tender. Setelah terdaftar menjadi peserta, Anda diharuskan untuk upload dokumen yang diperlukan!</p>
+                            <?php if (isset($_SESSION['id_vendor'])) { ?>
+                                <p>Silahkan masukkan harga penawaran Anda dan klik tombol <strong>Ikuti Tender</strong> untuk mendaftar menjadi peserta tender. Setelah terdaftar menjadi peserta, Anda diharuskan untuk upload dokumen yang diperlukan!</p>
 
-                            <form class="form" method="post" action="">
-                                <div class="form-group">
-                                    <label for="harga_penawaran">Harga Penawaran</label>
-                                    <input type="text" class="form-control" name="harga_penawaran" id="harga_penawaran" placeholder="Harga Penawaran">
-                                </div>
-                                <button type="submit" class="btn btn-success">Ikuti Tender</button>
-                            </form>
+                                <form class="form" method="post" action="">
+                                    <div class="form-group">
+                                        <label for="harga_penawaran">Harga Penawaran</label>
+                                        <input type="text" class="form-control" name="harga_penawaran" id="harga_penawaran" placeholder="Harga Penawaran">
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Ikuti Tender</button>
+                                </form>
+                            <?php } else { ?>
+                                <p>Silahkan login sebagai vendor untuk mengikuti tender!</p>
+                            <?php } ?>
                         <?php } ?>
                     </div>
                 </div>
